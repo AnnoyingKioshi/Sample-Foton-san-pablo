@@ -1,0 +1,985 @@
+<title>Foton Philippines San Pablo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@500;700;800;900&family=Outfit:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ------------------------------------------------------------------
+     Foton San Pablo — committed single-theme light showroom.
+     The brief pins a lit studio ground (client reference), so the page
+     commits to one visual world and paints every colour explicitly
+     rather than inverting mid-scroll.
+     Type system: Bodoni Moda = identity marks only (brand + model
+     wordmarks). Outfit = every other text role. IBM Plex Mono = data.
+     Radius system: pill for interactive, 6px for surfaces.
+     ------------------------------------------------------------------ */
+  :root{
+    --ground:#eceae3;        /* studio floor */
+    --ground-hi:#f6f5f1;     /* lit top of the gradient */
+    --surface:#ffffff;
+    --surface-2:#f2f0ea;
+    --steel-band:#dedbd1;    /* tinted section, same light family */
+    --ink:#191d22;
+    --ink-2:#3d454e;
+    --ink-3:#6d757e;
+    --line:rgba(25,29,34,0.12);
+    --line-soft:rgba(25,29,34,0.07);
+    --accent:#b4622a;        /* burnt orange — one accent, locked */
+    --steel:#4a6076;         /* cool counterpoint, data values only */
+    --shadow-soft:0 18px 40px rgba(25,29,34,0.10);
+    --ease:cubic-bezier(0.32,0.72,0,1);
+    /* Reading sections stay narrow enough to scan; the hero is a visual
+       moment and gets the wider shell so big screens aren't mostly margin. */
+    --shell:1560px;
+    --shell-hero:1760px;
+    --gutter:clamp(1.15rem,4vw,3.5rem);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--ground);
+    color:var(--ink);
+    font-family:"Outfit",system-ui,-apple-system,sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  img{display:block;max-width:100%;}
+  a{color:inherit;}
+  h1,h2,h3,h4{margin:0;text-wrap:balance;letter-spacing:-0.02em;font-weight:600;line-height:1.08;}
+  .mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums;}
+  .mark{font-family:"Bodoni Moda",Georgia,serif;}
+  .wrap{max-width:var(--shell);margin:0 auto;padding:0 var(--gutter);}
+  [hidden]{display:none!important;}
+  ::selection{background:var(--accent);color:#fff;}
+
+  /* ---------------- header ---------------- */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(246,245,241,0.82);
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line-soft);
+  }
+  .nav-row{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;height:68px;}
+  .brand{display:flex;flex-direction:column;line-height:1;text-decoration:none;cursor:pointer;}
+  .brand .b1{font-family:"Bodoni Moda",Georgia,serif;font-weight:800;font-size:1.35rem;letter-spacing:0.06em;text-transform:uppercase;}
+  .brand .b2{font-family:"IBM Plex Mono",monospace;font-size:0.58rem;letter-spacing:0.2em;color:var(--ink-3);margin-top:0.3rem;text-transform:uppercase;}
+  nav.links{display:flex;gap:clamp(0.9rem,2vw,1.9rem);font-size:0.9rem;font-weight:400;}
+  nav.links button{
+    background:none;border:none;color:var(--ink-2);font:inherit;cursor:pointer;
+    padding:0.3rem 0;border-bottom:1.5px solid transparent;
+    transition:color .4s var(--ease), border-color .4s var(--ease);
+  }
+  nav.links button:hover{color:var(--ink);}
+  nav.links button.active{color:var(--ink);border-color:var(--accent);}
+  .btn{
+    display:inline-flex;align-items:center;gap:0.6rem;
+    background:var(--ink);color:#fff;
+    font-family:"Outfit",sans-serif;font-weight:500;font-size:0.9rem;
+    padding:0.7rem 1.35rem;border-radius:999px;
+    text-decoration:none;border:1px solid var(--ink);cursor:pointer;white-space:nowrap;
+    transition:transform .5s var(--ease), background .5s var(--ease), box-shadow .5s var(--ease);
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(25,29,34,0.22);}
+  .btn:active{transform:scale(0.98);}
+  .btn .pip{
+    width:26px;height:26px;border-radius:999px;background:rgba(255,255,255,0.14);
+    display:inline-flex;align-items:center;justify-content:center;font-size:0.7rem;
+    margin-right:-0.5rem;
+    transition:transform .5s var(--ease);
+  }
+  .btn:hover .pip{transform:translate(2px,-1px);}
+  .btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line);}
+  .btn-ghost:hover{background:rgba(25,29,34,0.05);box-shadow:none;}
+  .btn-ghost .pip{background:rgba(25,29,34,0.07);}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
+  .menu-toggle{display:none;background:none;border:1px solid var(--line);color:var(--ink);padding:0.5rem 0.7rem;border-radius:999px;font-size:0.95rem;cursor:pointer;}
+
+  @media (max-width:960px){
+    nav.links{
+      position:absolute;top:100%;left:0;right:0;background:var(--ground-hi);
+      flex-direction:column;gap:0;border-bottom:1px solid var(--line);display:none;
+    }
+    nav.links.open{display:flex;}
+    nav.links button{padding:0.9rem 1.5rem;border-bottom:1px solid var(--line-soft);width:100%;text-align:left;}
+    .menu-toggle{display:inline-block;}
+    .nav-cta{display:none;}
+  }
+
+  /* ---------------- hero ---------------- */
+  .hero{
+    --glow:0.12;
+    position:relative;overflow:hidden;
+    background:
+      radial-gradient(ellipse 55% 45% at 50% 34%, rgba(180,98,42,var(--glow)), transparent 72%),
+      linear-gradient(175deg,var(--ground-hi) 0%,var(--ground) 62%,#e3e0d7 100%);
+    padding:clamp(1.2rem,2.4vw,1.8rem) 0 clamp(1rem,2vw,1.5rem);
+  }
+  .hero-top{
+    display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;
+    max-width:var(--shell-hero);margin:0 auto;padding:0 var(--gutter);
+  }
+  .hero-top .name{font-family:"Bodoni Moda",Georgia,serif;font-weight:700;font-size:clamp(0.95rem,2.2vw,1.25rem);letter-spacing:0.12em;text-transform:uppercase;}
+  .hero-top .tagline{font-size:clamp(0.82rem,1.6vw,0.95rem);color:var(--ink-3);margin-top:0.25rem;font-weight:300;}
+  .hero-top .unit-meta{font-family:"IBM Plex Mono",monospace;font-size:clamp(0.62rem,1.3vw,0.75rem);letter-spacing:0.1em;color:var(--ink-3);text-align:right;padding-top:0.35rem;}
+
+  .hero-stage{
+    position:relative;width:100%;
+    padding:clamp(0.5rem,2vw,1.4rem) var(--gutter) 0;
+  }
+  /* The rail is lifted out of the flow on purpose: while it sat in the flex
+     row it stole width from the centre column, so the vehicle centred on
+     the leftover space instead of on the page itself. */
+  .hero-rail{
+    position:absolute;left:var(--gutter);top:50%;transform:translateY(-50%);
+    display:flex;flex-direction:column;gap:0.5rem;z-index:3;
+  }
+  .rail-pill{
+    font-family:"Outfit",sans-serif;font-size:0.82rem;font-weight:400;
+    padding:0.5rem 1.1rem;border-radius:999px;
+    background:rgba(255,255,255,0.66);color:var(--ink-2);
+    border:1px solid var(--line-soft);
+    cursor:pointer;text-align:left;white-space:nowrap;
+    transition:background .45s var(--ease), color .45s var(--ease), transform .45s var(--ease), border-color .45s var(--ease);
+  }
+  .rail-pill.active{background:var(--ink);color:#fff;border-color:var(--ink);}
+
+  /* wordmark and unit share one centre by construction */
+  .hero-center{
+    position:relative;width:100%;
+    display:flex;align-items:flex-end;justify-content:center;
+    min-height:clamp(240px,30vw,460px);
+    padding-top:clamp(32px,5vw,92px);
+  }
+  /* No transform here on purpose. GSAP owns this element's transform for the
+     scroll parallax, and it bakes percentage translates into pixels at the
+     width it first ran — so a CSS translate(-50%) survives until the first
+     resize and then throws the word hundreds of px off-centre. Centre it with
+     left/right instead, and offset vertically in em so it tracks font-size. */
+  .wordmark{
+    position:absolute;left:0;right:0;top:calc(32% - 0.4em);
+    text-align:center;white-space:nowrap;pointer-events:none;z-index:1;
+    font-family:"Bodoni Moda",Georgia,serif;font-weight:800;
+    font-size:clamp(3.4rem,16vw,15rem);line-height:0.8;
+    letter-spacing:0.015em;text-transform:uppercase;
+    color:rgba(25,29,34,0.30);
+  }
+  .hero-unit{
+    position:relative;z-index:2;
+    width:clamp(260px,54vw,880px);
+    filter:drop-shadow(0 26px 30px rgba(25,29,34,0.20));
+  }
+
+  .hero-caption{
+    max-width:var(--shell-hero);margin:0 auto;
+    padding:clamp(0.3rem,1vw,0.7rem) var(--gutter) 0;
+    display:flex;flex-direction:column;align-items:center;text-align:center;gap:0.85rem;
+  }
+  .hero-caption h1{font-size:clamp(1.45rem,3.1vw,2.5rem);font-weight:500;max-width:20ch;}
+  .hero-caption h1 i{font-style:italic;font-weight:600;}
+  .cta-row{display:flex;gap:0.7rem;flex-wrap:wrap;justify-content:center;}
+
+  .spec-strip{
+    max-width:var(--shell-hero);margin:clamp(0.9rem,2vw,1.4rem) auto 0;
+    padding:0 var(--gutter);
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(142px,1fr));gap:0.8rem;
+  }
+  .spec-tile{
+    background:var(--surface);border:1px solid var(--line-soft);
+    border-radius:6px;padding:0.95rem 1.05rem;box-shadow:0 6px 18px rgba(25,29,34,0.05);
+  }
+  .spec-tile .row{display:flex;justify-content:space-between;align-items:flex-start;gap:0.5rem;}
+  .spec-tile .k{font-weight:500;font-size:0.92rem;letter-spacing:-0.01em;}
+  .spec-tile .v{font-size:0.8rem;color:var(--ink-3);margin-top:0.3rem;font-weight:300;line-height:1.45;}
+  .spec-tile svg{flex:0 0 auto;color:var(--ink-3);}
+
+  /* Below this the rail would crowd the vehicle, so it returns to the flow
+     as a horizontal strip that scrolls sideways rather than stacking into a
+     six-line column and eating the whole screen. */
+  @media (max-width:1080px){
+    .hero-rail{
+      position:static;transform:none;
+      flex-direction:row;gap:0.45rem;
+      overflow-x:auto;overflow-y:hidden;
+      scroll-snap-type:x proximity;
+      -webkit-overflow-scrolling:touch;
+      scrollbar-width:none;
+      padding-bottom:0.3rem;margin-bottom:0.5rem;
+    }
+    .hero-rail::-webkit-scrollbar{display:none;}
+    .rail-pill{flex:0 0 auto;scroll-snap-align:start;}
+    .hero-center{min-height:clamp(210px,44vw,380px);padding-top:clamp(26px,6vw,64px);}
+    .wordmark{top:calc(30% - 0.4em);font-size:clamp(3rem,17vw,8.5rem);}
+    .hero-unit{width:clamp(240px,72vw,620px);}
+  }
+  @media (max-width:640px){
+    .hero-center{min-height:clamp(170px,48vw,280px);}
+    .hero-caption h1{max-width:24ch;}
+    .cta-row{width:100%;}
+    .cta-row .btn{flex:1 1 auto;justify-content:center;}
+  }
+  @media (max-width:520px){
+    .hero-top{flex-direction:column;gap:0.4rem;}
+    .hero-top .unit-meta{text-align:left;padding-top:0;}
+    .wordmark{top:calc(28% - 0.4em);}
+    .hero-unit{width:min(88%,420px);}
+  }
+
+  /* Input method, not screen width: hover affordances only where a pointer
+     can actually hover, and bigger targets wherever the pointer is coarse. */
+  @media (hover:hover) and (pointer:fine){
+    .rail-pill:hover{transform:translateX(4px);border-color:var(--line);}
+  }
+  @media (pointer:coarse){
+    .rail-pill{min-height:44px;display:inline-flex;align-items:center;padding:0.6rem 1.15rem;}
+    nav.links button{min-height:44px;}
+    .btn{min-height:44px;}
+    .v-card .glare{display:none;}
+  }
+
+  /* ---------------- shared section furniture ---------------- */
+  .section{padding:clamp(3rem,7vw,6rem) 0;}
+  .section-head{display:flex;justify-content:space-between;align-items:flex-end;gap:1.2rem;margin-bottom:2.2rem;flex-wrap:wrap;}
+  .section-head h2{font-size:clamp(1.7rem,3.4vw,2.5rem);font-weight:500;}
+  .section-head p{color:var(--ink-3);font-weight:300;max-width:46ch;margin:0.5rem 0 0;}
+  .eyebrow{
+    font-family:"IBM Plex Mono",monospace;font-size:0.68rem;letter-spacing:0.18em;
+    text-transform:uppercase;color:var(--accent);display:block;margin-bottom:0.7rem;
+  }
+
+  /* ---------------- lineup cards ---------------- */
+  .card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:1.05rem;perspective:1400px;}
+  .v-card{
+    position:relative;background:var(--surface);border:1px solid var(--line-soft);
+    border-radius:6px;display:flex;flex-direction:column;cursor:pointer;
+    transform-style:preserve-3d;will-change:transform;
+    box-shadow:0 2px 6px rgba(25,29,34,0.04);
+    transition:box-shadow .6s var(--ease), border-color .6s var(--ease);
+  }
+  .v-card:hover{box-shadow:var(--shadow-soft);border-color:var(--line);}
+  .v-card .shot{
+    aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;padding:1.1rem;
+    background:linear-gradient(170deg,#fbfaf7 0%,var(--surface-2) 100%);
+    border-radius:6px 6px 0 0;overflow:hidden;
+  }
+  .v-card .shot img{max-height:100%;object-fit:contain;transform:translateZ(34px);}
+  /* meta fills the remaining card height so the price can be pinned to the
+     bottom — otherwise a two-line category (Tornado) pushes its price out of
+     line with the single-line cards beside it. */
+  .v-card .meta{
+    padding:1.05rem 1.15rem 1.3rem;border-top:1px solid var(--line-soft);
+    transform:translateZ(16px);
+    display:flex;flex-direction:column;flex:1 1 auto;
+  }
+  .v-card .unit{font-family:"IBM Plex Mono",monospace;font-size:0.65rem;letter-spacing:0.12em;color:var(--ink-3);}
+  .v-card h3{font-size:1.3rem;margin-top:0.35rem;font-weight:500;}
+  .v-card .cat{font-size:0.82rem;color:var(--ink-3);margin-top:0.2rem;font-weight:300;}
+  .v-card .price{margin-top:auto;padding-top:0.9rem;font-family:"IBM Plex Mono",monospace;font-size:0.88rem;color:var(--steel);font-weight:500;}
+  .v-card .glare{
+    position:absolute;inset:0;pointer-events:none;border-radius:6px;
+    background:linear-gradient(135deg,rgba(255,255,255,0.55),transparent 52%);
+    opacity:0;transition:opacity .5s var(--ease);
+  }
+  .v-card:hover .glare{opacity:1;}
+
+  /* ---------------- reasons band (stays in the light family) ---------------- */
+  .band{background:var(--steel-band);padding:clamp(3rem,6vw,5rem) 0;}
+  .reasons{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:2rem;margin-top:2rem;}
+  .reason{border-top:1px solid rgba(25,29,34,0.18);padding-top:1rem;}
+  .reason .n{font-family:"IBM Plex Mono",monospace;font-size:0.72rem;color:var(--accent);letter-spacing:0.1em;}
+  .reason h3{font-size:1.2rem;margin-top:0.55rem;font-weight:500;}
+  .reason p{color:var(--ink-2);font-size:0.92rem;margin:0.45rem 0 0;font-weight:300;max-width:34ch;}
+
+  /* ---------------- cta band ---------------- */
+  .ctaband{background:var(--ink);color:#fff;padding:clamp(2.6rem,5vw,4rem) 0;}
+  .ctaband .row{display:flex;justify-content:space-between;align-items:center;gap:1.6rem;flex-wrap:wrap;}
+  .ctaband h2{font-size:clamp(1.6rem,3vw,2.2rem);font-weight:500;max-width:22ch;}
+  .ctaband .btn{background:#fff;color:var(--ink);border-color:#fff;}
+  .ctaband .btn .pip{background:rgba(25,29,34,0.08);}
+
+  /* ---------------- inner page header ---------------- */
+  .page-head{background:linear-gradient(180deg,var(--ground-hi),var(--ground));padding:clamp(2.6rem,5vw,4rem) 0 clamp(1.6rem,3vw,2.4rem);border-bottom:1px solid var(--line-soft);}
+  .page-head h1{font-size:clamp(2rem,4.4vw,3.1rem);font-weight:500;}
+  .page-head p{color:var(--ink-3);max-width:54ch;margin:0.9rem 0 0;font-weight:300;}
+
+  /* ---------------- models grid ---------------- */
+  .models-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.2rem;padding:clamp(2.4rem,5vw,4rem) 0;}
+  .model-card{
+    background:var(--surface);border:1px solid var(--line-soft);border-radius:6px;
+    padding:1.5rem;display:flex;flex-direction:column;gap:1rem;
+    transition:box-shadow .6s var(--ease);
+  }
+  .model-card:hover{box-shadow:var(--shadow-soft);}
+  .model-card.featured{grid-column:1 / -1;flex-direction:row;align-items:center;gap:2.2rem;}
+  .model-card.featured .m-shot{flex:1 1 46%;}
+  .model-card.featured .m-body{flex:1 1 54%;}
+  .m-shot{
+    background:linear-gradient(170deg,#fbfaf7,var(--surface-2));
+    border-radius:6px;display:flex;align-items:center;justify-content:center;
+    padding:1.4rem;aspect-ratio:16/10;
+  }
+  .m-shot img{max-height:100%;object-fit:contain;}
+  .m-body .unit{font-family:"IBM Plex Mono",monospace;font-size:0.66rem;letter-spacing:0.12em;color:var(--ink-3);}
+  .m-body h2{font-size:clamp(1.5rem,2.6vw,2.1rem);margin-top:0.3rem;font-weight:500;}
+  .m-body .cat{color:var(--ink-3);font-size:0.9rem;margin-top:0.2rem;font-weight:300;}
+  .m-body .desc{margin:0.9rem 0 0;font-size:0.95rem;color:var(--ink-2);font-weight:300;max-width:52ch;}
+  .kv-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0.7rem 1.3rem;margin-top:1.2rem;}
+  .kv{border-top:1px solid var(--line-soft);padding-top:0.4rem;}
+  .kv .k{font-size:0.66rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-3);font-family:"IBM Plex Mono",monospace;}
+  .kv .v{font-weight:500;margin-top:0.15rem;font-size:0.92rem;}
+  .price-row{display:flex;align-items:center;gap:1.1rem;margin-top:1.4rem;flex-wrap:wrap;}
+  .price-row .price{font-family:"IBM Plex Mono",monospace;font-size:1.02rem;color:var(--steel);font-weight:500;}
+  @media (max-width:860px){
+    .models-grid{grid-template-columns:1fr;}
+    .model-card.featured{flex-direction:column;align-items:stretch;gap:1rem;}
+  }
+
+  /* ---------------- financing ---------------- */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:3rem;padding:clamp(2.4rem,5vw,4rem) 0;}
+  .steps{list-style:none;margin:1.4rem 0 0;padding:0;display:flex;flex-direction:column;gap:1.2rem;}
+  .steps li{display:flex;gap:1rem;}
+  .steps .n{font-family:"IBM Plex Mono",monospace;font-size:0.78rem;color:var(--accent);padding-top:0.2rem;}
+  .steps strong{font-weight:500;}
+  .steps span{color:var(--ink-3);font-size:0.92rem;font-weight:300;display:block;}
+  .table-wrap{overflow-x:auto;border:1px solid var(--line-soft);border-radius:6px;margin-top:1.3rem;background:var(--surface);}
+  table{border-collapse:collapse;width:100%;min-width:460px;font-size:0.9rem;}
+  th,td{text-align:left;padding:0.8rem 1rem;font-variant-numeric:tabular-nums;}
+  thead th{font-family:"IBM Plex Mono",monospace;font-size:0.66rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-3);font-weight:400;background:var(--surface-2);}
+  tbody tr + tr td{border-top:1px solid var(--line-soft);}
+  .fine{font-size:0.78rem;color:var(--ink-3);margin-top:0.8rem;font-weight:300;}
+  .doc-list{list-style:none;margin:1rem 0 0;padding:0;display:grid;gap:0.55rem;}
+  .doc-list li{display:flex;gap:0.7rem;font-size:0.92rem;color:var(--ink-2);font-weight:300;}
+  .doc-list li::before{content:"";width:14px;height:1px;background:var(--accent);margin-top:0.72rem;flex:0 0 auto;}
+  @media (max-width:860px){.split{grid-template-columns:1fr;gap:2rem;}}
+
+  /* ---------------- service ---------------- */
+  .bays{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.1rem;padding:clamp(2.4rem,5vw,3.4rem) 0 0;}
+  .bay{background:var(--surface);border:1px solid var(--line-soft);border-radius:6px;padding:1.5rem;}
+  .bay .n{font-family:"IBM Plex Mono",monospace;font-size:0.68rem;color:var(--accent);letter-spacing:0.1em;}
+  .bay h3{font-size:1.15rem;margin-top:0.6rem;font-weight:500;}
+  .bay p{font-size:0.9rem;color:var(--ink-3);margin:0.5rem 0 0;font-weight:300;}
+
+  /* ---------------- about ---------------- */
+  .about{display:grid;grid-template-columns:1.15fr 0.85fr;gap:3.2rem;padding:clamp(2.4rem,5vw,4rem) 0;align-items:start;}
+  .about p{margin:0 0 1.1rem;max-width:56ch;color:var(--ink-2);font-weight:300;}
+  .stats{display:flex;flex-direction:column;gap:1.6rem;}
+  .stat{border-top:1px solid var(--line);padding-top:0.7rem;}
+  .stat .v{font-family:"Bodoni Moda",Georgia,serif;font-size:2.6rem;line-height:1;font-weight:700;}
+  .stat .k{font-size:0.85rem;color:var(--ink-3);margin-top:0.35rem;font-weight:300;}
+  @media (max-width:860px){.about{grid-template-columns:1fr;gap:2rem;}}
+
+  /* ---------------- contact ---------------- */
+  .contact{display:grid;grid-template-columns:0.9fr 1.1fr;gap:3rem;padding:clamp(2.4rem,5vw,4rem) 0;}
+  .info{margin-bottom:1.8rem;}
+  .info h3{font-size:1rem;font-weight:500;margin-bottom:0.5rem;}
+  .info p{margin:0.15rem 0;font-size:0.94rem;color:var(--ink-2);font-weight:300;}
+  form{display:flex;flex-direction:column;gap:1.1rem;background:var(--surface);border:1px solid var(--line-soft);border-radius:6px;padding:1.7rem;}
+  .field{display:flex;flex-direction:column;gap:0.4rem;}
+  .field label{font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;font-family:"IBM Plex Mono",monospace;color:var(--ink-3);}
+  .field input,.field select,.field textarea{
+    font:inherit;font-size:0.95rem;padding:0.7rem 0.85rem;border:1px solid var(--line);border-radius:6px;
+    background:#fff;color:var(--ink);
+  }
+  .field input::placeholder,.field textarea::placeholder{color:#9aa1a9;}
+  form .btn{align-self:flex-start;}
+  .demo-note{font-size:0.78rem;color:var(--ink-3);margin:-0.3rem 0 0;font-weight:300;}
+  .map-note{margin-top:1.6rem;border:1px dashed var(--line);border-radius:6px;padding:1.3rem;font-size:0.85rem;color:var(--ink-3);font-weight:300;}
+  @media (max-width:860px){.contact{grid-template-columns:1fr;gap:2rem;}}
+
+  /* ---------------- footer ---------------- */
+  footer{background:var(--ink);color:rgba(255,255,255,0.62);padding:3rem 0 1.6rem;font-size:0.9rem;font-weight:300;}
+  .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:2.4rem;padding-bottom:2rem;border-bottom:1px solid rgba(255,255,255,0.14);}
+  .foot-grid h4{color:#fff;font-size:0.95rem;margin-bottom:0.8rem;font-weight:500;}
+  .foot-grid p{margin:0;}
+  .foot-grid ul{list-style:none;padding:0;margin:0;display:grid;gap:0.5rem;}
+  .foot-grid a{text-decoration:none;transition:color .4s var(--ease);}
+  .foot-grid a:hover{color:#fff;}
+  .foot-bottom{display:flex;justify-content:space-between;padding-top:1.3rem;flex-wrap:wrap;gap:0.6rem;font-size:0.76rem;color:rgba(255,255,255,0.45);}
+  @media (max-width:760px){.foot-grid{grid-template-columns:1fr;gap:1.6rem;}}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{transition:none!important;animation:none!important;}
+  }
+</style>
+
+<header>
+  <div class="wrap nav-row">
+    <a class="brand" data-link data-route="home" href="#/">
+      <span class="b1">Foton</span>
+      <span class="b2">San Pablo</span>
+    </a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false">Menu</button>
+    <nav class="links" id="navLinks">
+      <button data-link data-route="home">Home</button>
+      <button data-link data-route="models">Models</button>
+      <button data-link data-route="financing">Financing</button>
+      <button data-link data-route="service">Service</button>
+      <button data-link data-route="about">About</button>
+      <button data-link data-route="contact">Contact</button>
+    </nav>
+    <a class="btn nav-cta" data-link data-route="contact" href="#/contact">Get a Quote <span class="pip">&rarr;</span></a>
+  </div>
+</header>
+
+<main>
+<!-- ============ HOME ============ -->
+<section data-page="home">
+  <div class="hero">
+    <div class="hero-top">
+      <div>
+        <div class="name">Foton San Pablo</div>
+        <div class="tagline">Uptime without compromise</div>
+      </div>
+      <div class="unit-meta" id="heroUnitMeta">UNIT 001 · THUNDER · 2026</div>
+    </div>
+
+    <div class="hero-stage">
+      <div class="hero-rail" id="heroRail"></div>
+      <div class="hero-center">
+        <div class="wordmark" id="heroWordmark" aria-hidden="true">Thunder</div>
+        <img class="hero-unit" id="heroImg" src="images/thunder.png" alt="Foton Thunder pickup truck, front three-quarter view">
+      </div>
+    </div>
+
+    <div class="hero-caption">
+      <h1>Built for the route San Pablo <i>actually drives</i>.</h1>
+      <div class="cta-row">
+        <a class="btn" data-link data-route="models" href="#/models">View the Lineup <span class="pip">&rarr;</span></a>
+        <a class="btn btn-ghost" data-link data-route="contact" href="#/contact">Talk to Sales</a>
+      </div>
+    </div>
+
+    <div class="spec-strip" id="heroSpecStrip"></div>
+  </div>
+
+  <div class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Units 001–005</span>
+          <h2>Five units on the lot</h2>
+          <p>Filter the rail above to swap the featured unit, or browse the full spec sheets.</p>
+        </div>
+        <a class="btn btn-ghost" data-link data-route="models" href="#/models">Full specs <span class="pip">&rarr;</span></a>
+      </div>
+      <div class="card-grid" id="homeLineup"></div>
+    </div>
+  </div>
+
+  <div class="band">
+    <div class="wrap">
+      <h2 style="font-size:clamp(1.7rem,3.4vw,2.5rem);font-weight:500;max-width:18ch;">Why fleet owners come back</h2>
+      <div class="reasons">
+        <div class="reason">
+          <div class="n">01</div>
+          <h3>Financing approved on-site</h3>
+          <p>Bank tie-ups and in-house terms for single units or multi-unit fleet orders.</p>
+        </div>
+        <div class="reason">
+          <div class="n">02</div>
+          <h3>Parts on the shelf</h3>
+          <p>Wear parts for Thunder, Tornado and Gratour stocked here, not in a Manila warehouse.</p>
+        </div>
+        <div class="reason">
+          <div class="n">03</div>
+          <h3>Service bays on the lot</h3>
+          <p>Scheduled maintenance and warranty work where you bought the unit.</p>
+        </div>
+        <div class="reason">
+          <div class="n">04</div>
+          <h3>Fleet-rate quotes</h3>
+          <p>Volume pricing for delivery services, cooperatives and construction outfits at three units or more.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ctaband">
+    <div class="wrap row">
+      <h2>See a unit in person before you commit.</h2>
+      <a class="btn" data-link data-route="contact" href="#/contact">Schedule a Viewing <span class="pip">&rarr;</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MODELS ============ -->
+<section data-page="models" hidden>
+  <div class="page-head">
+    <div class="wrap">
+      <h1>Five units. One lot.</h1>
+      <p>Specs cover the base configuration sold at San Pablo. Ask sales about dropside, wing van and F-van bodies where the platform supports them.</p>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="models-grid" id="modelsList"></div>
+  </div>
+</section>
+
+<!-- ============ FINANCING ============ -->
+<section data-page="financing" hidden>
+  <div class="page-head">
+    <div class="wrap">
+      <h1>Terms built around cash flow.</h1>
+      <p>Bank financing, in-house amortization or straight cash. Sales works out the structure before you sign anything.</p>
+    </div>
+  </div>
+  <div class="wrap split">
+    <div>
+      <h2 style="font-size:1.45rem;font-weight:500;">How approval runs here</h2>
+      <ul class="steps">
+        <li><span class="n">01</span><div><strong>Pick the unit and body type.</strong><span>Dropside, F-van or MPV changes the total price.</span></div></li>
+        <li><span class="n">02</span><div><strong>Submit two IDs and proof of income.</strong><span>Payslips, ITR, or six months of bank statements if self-employed.</span></div></li>
+        <li><span class="n">03</span><div><strong>Choose bank or in-house terms.</strong><span>Sales runs both sets of numbers side by side.</span></div></li>
+        <li><span class="n">04</span><div><strong>Down payment, then release.</strong><span>Most units release within three to five banking days of approval.</span></div></li>
+      </ul>
+      <h3 style="font-size:1.05rem;margin-top:2rem;font-weight:500;">What to bring</h3>
+      <ul class="doc-list">
+        <li>Two government-issued IDs</li>
+        <li>Proof of billing, latest month</li>
+        <li>Payslip or Certificate of Employment, or ITR for business owners</li>
+        <li>Reservation fee, deductible from the down payment</li>
+      </ul>
+    </div>
+    <div>
+      <h2 style="font-size:1.45rem;font-weight:500;">Sample computation</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Unit</th><th>SRP</th><th>20% DP</th><th>Monthly*</th></tr></thead>
+          <tbody>
+            <tr><td>Gratour Dropside</td><td class="mono">₱570,000</td><td class="mono">₱114,000</td><td class="mono">₱9,800 · 60 mo</td></tr>
+            <tr><td>Thunder 4x2 A/T</td><td class="mono">₱1,290,000</td><td class="mono">₱258,000</td><td class="mono">₱21,600 · 60 mo</td></tr>
+            <tr><td>Traveller XL</td><td class="mono">₱1,680,000</td><td class="mono">₱336,000</td><td class="mono">₱27,900 · 60 mo</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="fine">*Sample figures for this demo build, not an official quotation. The actual rate depends on the bank, the term and credit standing at the time of application.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SERVICE ============ -->
+<section data-page="service" hidden>
+  <div class="page-head">
+    <div class="wrap">
+      <h1>Keep the unit on the road.</h1>
+      <p>Four bays on-site, genuine Foton parts, and technicians who work on the Thunder, Tornado and Gratour lines every week.</p>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="bays">
+      <div class="bay"><div class="n">BAY 01</div><h3>Preventive maintenance</h3><p>PMS at 1,000 km, 5,000 km, then every 10,000 km. Oil, filters, brake and belt inspection.</p></div>
+      <div class="bay"><div class="n">BAY 02</div><h3>Warranty work</h3><p>Three years or 100,000 km, handled here rather than referred to another shop.</p></div>
+      <div class="bay"><div class="n">BAY 03</div><h3>Body and paint</h3><p>Dent, scratch and repaint work for fleet units logging heavy daily mileage.</p></div>
+      <div class="bay"><div class="n">BAY 04</div><h3>Fleet check-up</h3><p>Batch inspection days for delivery and logistics fleets running five units or more.</p></div>
+    </div>
+    <div style="padding:clamp(2.4rem,5vw,4rem) 0;">
+      <h2 style="font-size:1.45rem;margin-bottom:0.4rem;font-weight:500;">Standard PMS schedule</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Interval</th><th>Work done</th><th>Duration</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">1,000 km</td><td>First service, oil change and general inspection</td><td class="mono">1 hr</td></tr>
+            <tr><td class="mono">5,000 km</td><td>Oil, oil filter, tire rotation</td><td class="mono">1.5 hrs</td></tr>
+            <tr><td class="mono">10,000 km</td><td>Oil, filters, brake inspection, fluid top-up</td><td class="mono">2 hrs</td></tr>
+            <tr><td class="mono">20,000 km</td><td>Belts, suspension, air filter, full diagnostics</td><td class="mono">3 hrs</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section data-page="about" hidden>
+  <div class="page-head">
+    <div class="wrap">
+      <h1>One lot on the National Highway.</h1>
+      <p>Serving San Pablo City and the towns around the Seven Lakes, from a single property where sales, financing and service sit together.</p>
+    </div>
+  </div>
+  <div class="wrap about">
+    <div>
+      <p>Foton Philippines San Pablo sells and services the Foton commercial lineup — Thunder, Tornado, Traveller, Gratour and Transvan — from one lot along the National Highway in San Pablo City, Laguna.</p>
+      <p>Most buyers here run a business. Rice traders moving sacks toward Sta. Cruz, delivery operators serving Calamba and Los Baños, cooperatives shuttling workers out to the coconut and coffee farms past the city proper. The lineup is stocked around that kind of driving: short-haul, loaded, daily.</p>
+      <p>Sales, financing and the service bays share the same property, so a unit bought here gets serviced here, by technicians who know the exact trims sold on this lot.</p>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="v">5</div><div class="k">Foton model lines in stock</div></div>
+      <div class="stat"><div class="v">4</div><div class="k">Service bays on-site</div></div>
+      <div class="stat"><div class="v">3 yr</div><div class="k">Standard warranty coverage</div></div>
+      <div class="stat"><div class="v">7</div><div class="k">Lakes in the city this lot calls home</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section data-page="contact" hidden>
+  <div class="page-head">
+    <div class="wrap">
+      <h1>Talk to sales.</h1>
+      <p>This is a portfolio demo. The details below stand in for a real showroom address, phone line and inquiry form.</p>
+    </div>
+  </div>
+  <div class="wrap contact">
+    <div>
+      <div class="info">
+        <h3>Showroom</h3>
+        <p>National Highway, Brgy. San Isidro</p>
+        <p>San Pablo City, Laguna 4000</p>
+      </div>
+      <div class="info">
+        <h3>Hours</h3>
+        <p>Monday to Saturday, 8:00 AM – 6:00 PM</p>
+        <p>Sunday, 9:00 AM – 3:00 PM, sales only</p>
+      </div>
+      <div class="info">
+        <h3>Reach us</h3>
+        <p>Sales (049) 000-0000</p>
+        <p>Service (049) 000-0001</p>
+        <p>sales@fotonsanpablo.example</p>
+      </div>
+      <div class="map-note">Map embed left out of this demo. A live build would drop a pin on the National Highway location here.</div>
+    </div>
+    <form id="inquiryForm">
+      <div class="field">
+        <label for="name">Full name</label>
+        <input id="name" type="text" placeholder="Juan dela Cruz" required>
+      </div>
+      <div class="field">
+        <label for="phone">Mobile number</label>
+        <input id="phone" type="tel" placeholder="09XX XXX XXXX" required>
+      </div>
+      <div class="field">
+        <label for="unit">Unit you're asking about</label>
+        <select id="unit">
+          <option>Foton Thunder</option>
+          <option>Foton Tornado</option>
+          <option>Foton Traveller</option>
+          <option>Foton Gratour</option>
+          <option>Foton Transvan</option>
+          <option>Not sure yet</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="msg">Message</label>
+        <textarea id="msg" rows="4" placeholder="How you plan to use the unit, and your target timeline."></textarea>
+      </div>
+      <button class="btn" type="submit">Send Inquiry <span class="pip">&rarr;</span></button>
+      <p class="demo-note">Demo only. This form does not send data anywhere.</p>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <h4>Foton Philippines San Pablo</h4>
+        <p>An independent Foton dealership on the National Highway, San Pablo City, Laguna. Sales, financing and service under one roof.</p>
+      </div>
+      <div>
+        <h4>Lineup</h4>
+        <ul>
+          <li><a data-link data-route="models" href="#/models">Thunder</a></li>
+          <li><a data-link data-route="models" href="#/models">Tornado</a></li>
+          <li><a data-link data-route="models" href="#/models">Traveller</a></li>
+          <li><a data-link data-route="models" href="#/models">Gratour</a></li>
+          <li><a data-link data-route="models" href="#/models">Transvan</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Dealership</h4>
+        <ul>
+          <li><a data-link data-route="financing" href="#/financing">Financing</a></li>
+          <li><a data-link data-route="service" href="#/service">Service</a></li>
+          <li><a data-link data-route="about" href="#/about">About</a></li>
+          <li><a data-link data-route="contact" href="#/contact">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>Portfolio demo build. Not an official Foton Motor Philippines property.</span>
+      <span>San Pablo City, Laguna</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  var vehicles = [
+    {
+      id:"thunder", unit:"UNIT 001", name:"Thunder", cat:"Pickup · 4x2 / 4x4", group:"Pickups",
+      price:"From ₱1,080,000", img:"images/thunder.png",
+      alt:"Foton Thunder pickup truck, front three-quarter view",
+      desc:"The volume seller on this lot. A double-cab pickup for daily loading and provincial highway runs, in manual or automatic, 4x2 or 4x4.",
+      specs:[["Engine","2.0L Turbodiesel"],["Output","Up to 163 hp"],["Drive","4x2 / 4x4"],["Transmission","6-Speed M/T or A/T"],["Bed Payload","~1,000 kg"],["Seating","5"]]
+    },
+    {
+      id:"tornado", unit:"UNIT 002", name:"Tornado", cat:"Light Truck · MPV / Dropside / F-Van", group:"Light Trucks",
+      price:"From ₱950,000", img:"images/tornado.png",
+      alt:"Foton Tornado light truck, front three-quarter view",
+      desc:"A cab-and-chassis platform sold in MPV, dropside, F-van and dump bodies. The usual pick for cooperatives running a shuttle or a delivery route.",
+      specs:[["Engine","3.7L or 4.2L Diesel"],["GVW Class","M2.6C – M6.1C"],["Transmission","5-Speed M/T"],["Body Options","MPV, Dropside, F-Van, Dump"],["Seating","Up to 25, MPV body"],["Drive","4x2"]]
+    },
+    {
+      id:"traveller", unit:"UNIT 003", name:"Traveller", cat:"Van · Shuttle / Tourist", group:"Passenger Vans",
+      price:"From ₱1,600,000", img:"images/traveller.png",
+      alt:"Foton Traveller van, front three-quarter view",
+      desc:"A high-roof passenger van for tour operators, church groups and company shuttles moving fifteen or more people in one trip.",
+      specs:[["Engine","2.8L Turbodiesel"],["Seating","15–18"],["Transmission","5-Speed M/T"],["Drive","4x2"],["Configuration","XL, high-roof"],["Use Case","Tourist / shuttle"]]
+    },
+    {
+      id:"gratour", unit:"UNIT 004", name:"Gratour", cat:"Entry Pickup / Van", group:"Entry Pickups",
+      price:"From ₱570,000", img:"images/gratour.png",
+      alt:"Foton Gratour mini pickup, front three-quarter view",
+      desc:"The entry point. A compact pickup and van platform priced for a first commercial vehicle, or a second unit for tight city streets.",
+      specs:[["Engine","1.5L Gasoline / Diesel"],["Body Options","Dropside, F-Van, MPV, Wingvan"],["Transmission","5-Speed M/T"],["Payload","~700 kg"],["Drive","4x2"],["Seating","Up to 7, MPV body"]]
+    },
+    {
+      id:"transvan", unit:"UNIT 005", name:"Transvan", cat:"Van · Cargo / Passenger", group:"Cargo Vans",
+      price:"From ₱1,150,000", img:"images/transvan.png",
+      alt:"Foton Transvan, front three-quarter view",
+      desc:"A mid-size van split between a cargo build for delivery operators and a passenger build for staff transport, both on the same high-roof body.",
+      specs:[["Engine","2.8L Turbodiesel"],["Body Options","Cargo, Passenger, Ambulance"],["Transmission","5-Speed M/T"],["Roof","High-roof (HR)"],["Drive","4x2"],["Cargo Volume","~6.5 m³, cargo build"]]
+    }
+  ];
+
+  /* thin-line marks, 1.25 stroke — no dingbats, no emoji */
+  var ICONS = {
+    gauge:'<circle cx="10" cy="10" r="7"/><path d="M10 10 13 6.6"/>',
+    bolt:'<path d="M11 2.5 5.5 11h4l-.5 6.5L15 9h-4z"/>',
+    scale:'<path d="M10 3v14M5 7h10M5 7 3 12h4zM15 7l-2 5h4z"/>',
+    wheel:'<circle cx="10" cy="10" r="7"/><circle cx="10" cy="10" r="2.6"/>',
+    swap:'<path d="M4 7.5h12l-2.6-2.6M16 12.5H4l2.6 2.6"/>',
+    box:'<path d="M3.5 6.5 10 3l6.5 3.5v7L10 17l-6.5-3.5z"/><path d="M3.5 6.5 10 10l6.5-3.5M10 10v7"/>',
+    seat:'<circle cx="10" cy="6.2" r="2.6"/><path d="M4.6 17c0-3 2.4-5.2 5.4-5.2s5.4 2.2 5.4 5.2"/>',
+    layers:'<path d="M10 3 3.5 6.7 10 10.4l6.5-3.7z"/><path d="M3.5 11.2 10 14.9l6.5-3.7"/>'
+  };
+  var ICON_FOR = {
+    "Engine":"gauge", "Output":"bolt", "GVW Class":"scale", "Drive":"wheel",
+    "Transmission":"swap", "Body Options":"box", "Bed Payload":"box", "Payload":"box",
+    "Cargo Volume":"box", "Seating":"seat", "Configuration":"layers", "Use Case":"layers",
+    "Roof":"layers"
+  };
+  function icon(key){
+    var d = ICONS[ICON_FOR[key] || "layers"];
+    return '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" '+
+           'stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+d+'</svg>';
+  }
+
+  var $ = function(id){ return document.getElementById(id); };
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var hasGsap = !!window.gsap;
+  /* registered up front: renderLineup builds a ScrollTrigger before the
+     motion block further down would otherwise register the plugin. */
+  if(hasGsap && window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
+
+  /* ---------- templates ---------- */
+  function cardHTML(v){
+    return '<article class="v-card" data-link data-route="models">'+
+      '<div class="glare"></div>'+
+      '<div class="shot"><img src="'+v.img+'" alt="'+v.alt+'" loading="lazy"></div>'+
+      '<div class="meta"><div class="unit">'+v.unit+'</div><h3>'+v.name+'</h3>'+
+      '<div class="cat">'+v.cat+'</div><div class="price">'+v.price+'</div></div></article>';
+  }
+
+  function modelCardHTML(v, featured){
+    var kv = v.specs.map(function(s){
+      return '<div class="kv"><div class="k">'+s[0]+'</div><div class="v">'+s[1]+'</div></div>';
+    }).join('');
+    return '<article class="model-card'+(featured?' featured':'')+'">'+
+      '<div class="m-shot"><img src="'+v.img+'" alt="'+v.alt+'" loading="lazy"></div>'+
+      '<div class="m-body">'+
+        '<div class="unit">'+v.unit+'</div>'+
+        '<h2>'+v.name+'</h2>'+
+        '<div class="cat">'+v.cat+'</div>'+
+        '<p class="desc">'+v.desc+'</p>'+
+        '<div class="kv-grid">'+kv+'</div>'+
+        '<div class="price-row"><span class="price">'+v.price+'</span>'+
+        '<a class="btn btn-ghost" data-link data-route="contact" href="#/contact">Inquire <span class="pip">&rarr;</span></a></div>'+
+      '</div></article>';
+  }
+
+  function specTileHTML(pair){
+    return '<div class="spec-tile"><div class="row"><div class="k">'+pair[0]+'</div>'+icon(pair[0])+'</div>'+
+           '<div class="v">'+pair[1]+'</div></div>';
+  }
+
+  $('modelsList').innerHTML = vehicles.map(function(v,i){ return modelCardHTML(v, i===0); }).join('');
+
+  /* ---------- hero: filter rail drives the featured unit ---------- */
+  var groups = ["All Units"].concat(vehicles.map(function(v){return v.group;}));
+  var railEl = $('heroRail'), lineupEl = $('homeLineup');
+  var heroImg = $('heroImg'), heroWord = $('heroWordmark'), heroMeta = $('heroUnitMeta'), heroStrip = $('heroSpecStrip');
+
+  function renderHero(v){
+    heroImg.src = v.img;
+    heroImg.alt = v.alt;
+    heroWord.textContent = v.name;
+    heroMeta.textContent = v.unit+' · '+v.name.toUpperCase()+' · 2026';
+    heroStrip.innerHTML = v.specs.slice(0,5).map(specTileHTML).join('');
+    /* overwrite:"auto" so these only clear conflicting properties — a blanket
+       overwrite would kill the scroll-linked y tweens set up further down. */
+    if(hasGsap && !reduced){
+      gsap.fromTo(heroImg, {scale:0.93, opacity:0}, {scale:1, opacity:1, duration:0.6, ease:"power3.out", overwrite:"auto"});
+      gsap.fromTo(heroWord, {opacity:0}, {opacity:1, duration:0.7, ease:"sine.out", overwrite:"auto"});
+      gsap.fromTo('#heroSpecStrip .spec-tile', {y:14, opacity:0},
+        {y:0, opacity:1, duration:0.5, ease:"power3.out", stagger:0.06, overwrite:"auto"});
+    }
+  }
+
+  function attachTilt(scope){
+    if(!hasGsap || reduced) return;
+    if(window.matchMedia && !window.matchMedia('(hover: hover)').matches) return;
+    scope.querySelectorAll('.v-card').forEach(function(card){
+      var rx = gsap.quickTo(card, "rotationY", {duration:0.5, ease:"power3"});
+      var ry = gsap.quickTo(card, "rotationX", {duration:0.5, ease:"power3"});
+      var sc = gsap.quickTo(card, "scale",     {duration:0.5, ease:"power3"});
+      card.addEventListener('mousemove', function(e){
+        var r = card.getBoundingClientRect();
+        rx(((e.clientX - r.left)/r.width - 0.5) * 15);
+        ry((0.5 - (e.clientY - r.top)/r.height) * 15);
+        sc(1.025);
+      });
+      card.addEventListener('mouseleave', function(){ rx(0); ry(0); sc(1); });
+    });
+  }
+
+  function renderLineup(group){
+    var list = (group === 'All Units') ? vehicles : vehicles.filter(function(v){ return v.group === group; });
+    lineupEl.innerHTML = list.map(cardHTML).join('');
+    if(hasGsap && !reduced && window.ScrollTrigger){
+      /* the grid sits below the fold on load, so tie the arrival to scroll
+         position rather than render time — otherwise it plays unseen. */
+      ScrollTrigger.getAll().forEach(function(t){ if(t.vars.id === 'lineup') t.kill(); });
+      gsap.fromTo('#homeLineup .v-card', {y:26, opacity:0}, {
+        y:0, opacity:1, duration:0.6, ease:"power3.out", stagger:0.07, overwrite:"auto",
+        scrollTrigger:{
+          id:'lineup', trigger:'#homeLineup', start:"top 86%",
+          toggleActions:"play none none reverse"
+        }
+      });
+    }
+    attachTilt(lineupEl);
+  }
+
+  railEl.innerHTML = groups.map(function(g,i){
+    return '<button class="rail-pill'+(i===0?' active':'')+'" data-group="'+g+'">'+g+'</button>';
+  }).join('');
+
+  railEl.addEventListener('click', function(e){
+    var btn = e.target.closest('.rail-pill');
+    if(!btn) return;
+    railEl.querySelectorAll('.rail-pill').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    var g = btn.getAttribute('data-group');
+    renderLineup(g);
+    var first = (g === 'All Units') ? vehicles[0] : vehicles.filter(function(v){ return v.group === g; })[0];
+    if(first) renderHero(first);
+  });
+
+  renderHero(vehicles[0]);
+  renderLineup('All Units');
+
+  /* ---------- routing ---------- */
+  var routes = ['home','models','financing','service','about','contact'];
+  var sections = {};
+  routes.forEach(function(r){ sections[r] = document.querySelector('[data-page="'+r+'"]'); });
+  var navBtns = document.querySelectorAll('nav.links [data-route]');
+
+  function showRoute(route){
+    if(routes.indexOf(route) === -1) route = 'home';
+    routes.forEach(function(r){ sections[r].hidden = (r !== route); });
+    navBtns.forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-route') === route); });
+    $('navLinks').classList.remove('open');
+    window.scrollTo(0,0);
+    if(hasGsap && !reduced && window.ScrollTrigger) ScrollTrigger.refresh();
+  }
+  function routeFromHash(){
+    var h = location.hash.replace('#/','').replace('#','');
+    return h || 'home';
+  }
+  window.addEventListener('hashchange', function(){ showRoute(routeFromHash()); });
+  document.addEventListener('click', function(e){
+    var el = e.target.closest('[data-link][data-route]');
+    if(!el) return;
+    if(el.tagName === 'BUTTON' || el.tagName === 'ARTICLE'){
+      location.hash = '/' + el.getAttribute('data-route');
+    }
+  });
+  $('menuToggle').addEventListener('click', function(){
+    var open = $('navLinks').classList.toggle('open');
+    this.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  $('inquiryForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    alert('Demo form. Nothing is sent. Wire this to your CRM or an email service before going live.');
+  });
+
+  showRoute(routeFromHash());
+
+  /* ---------- motion ----------
+     Recipes from the hyperframes-animation skill (spring-pop-entrance,
+     waterfall-entry, ambient-glow-bloom), rebuilt as autoplaying GSAP
+     timelines for a live page instead of that skill's seek-safe paused
+     timelines, which assume an external video-render harness. */
+  if(hasGsap && !reduced){
+    gsap.timeline({defaults:{ease:"power3.out"}})
+      .fromTo('.hero-top > div',    {y:-10, opacity:0}, {y:0, opacity:1, duration:0.5})
+      .fromTo('.hero-top .unit-meta',{opacity:0},       {opacity:1, duration:0.5}, "<")
+      .fromTo('.rail-pill',          {x:-14, opacity:0},{x:0, opacity:1, duration:0.45, stagger:0.055}, "-=0.25")
+      .fromTo('.hero-caption h1',    {y:16, opacity:0}, {y:0, opacity:1, duration:0.55}, "-=0.3")
+      .fromTo('.hero-caption .btn',  {y:12, opacity:0}, {y:0, opacity:1, duration:0.45, stagger:0.07}, "-=0.3");
+
+    /* bounded ambient bloom behind the unit — finite, never an endless loop */
+    gsap.fromTo('.hero', {"--glow":0.07}, {"--glow":0.15, duration:3.4, ease:"sine.inOut", yoyo:true, repeat:5});
+
+    /* Reveals replay on re-entry instead of firing once, so scrolling back up
+       and down keeps the page alive rather than leaving dead, static sections. */
+    [['.reasons .reason','.band'], ['.bays .bay','.bays'],
+     ['.model-card','.models-grid'], ['.stats .stat','.about'],
+     ['.steps li','.steps'], ['.ctaband h2','.ctaband'],
+     ['.section-head','.section-head']].forEach(function(pair){
+      var els = document.querySelectorAll(pair[0]);
+      if(!els.length) return;
+      gsap.fromTo(els, {y:24, opacity:0}, {
+        y:0, opacity:1, duration:0.6, ease:"power3.out", stagger:0.07,
+        scrollTrigger:{
+          trigger:pair[1], start:"top 86%",
+          toggleActions:"play none none reverse"
+        }
+      });
+    });
+
+    /* Triggers are built before the vehicle PNGs report their height, which
+       leaves them measuring against a much shorter document (start positions
+       land negative, so a section reads as already-passed and never resets).
+       Re-measure once images and fonts have settled. */
+    window.addEventListener('load', function(){ ScrollTrigger.refresh(); });
+    if(document.fonts && document.fonts.ready){
+      document.fonts.ready.then(function(){ ScrollTrigger.refresh(); });
+    }
+    heroImg.addEventListener('load', function(){ ScrollTrigger.refresh(); });
+
+    /* Depth parallax: the wordmark sits behind the unit, so it should travel
+       slower than the page. Reinforces the same z-layering the cards use. */
+    gsap.to('#heroWordmark', {
+      y:-70, ease:"none",
+      scrollTrigger:{trigger:'.hero', start:"top top", end:"bottom top", scrub:0.5, invalidateOnRefresh:true}
+    });
+    gsap.to('.hero-unit', {
+      y:26, ease:"none",
+      scrollTrigger:{trigger:'.hero', start:"top top", end:"bottom top", scrub:0.5, invalidateOnRefresh:true}
+    });
+  }
+})();
+</script>
