@@ -1,6 +1,16 @@
 <meta charset="utf-8">
-<title>Foton Philippines San Pablo</title>
+<title>[Your Name] – Foton San Pablo</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- SEO + Open Graph. [Your Name], the phone number and the OG image path
+     are placeholders — real values go in before this ever gets shared. -->
+<meta name="description" content="Trusted Foton sales rep in San Pablo City, Laguna. Vans, trucks and pickups from the Foton lineup, financing help, and a direct line on Viber — no showroom small talk required.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="[Your Name] – Foton San Pablo">
+<meta property="og:title" content="Trusted Foton Sales in San Pablo City">
+<meta property="og:description" content="Direct line to [Your Name], Foton sales rep in San Pablo City, Laguna. Vans, trucks and pickups, financing help, Viber inquiries welcome.">
+<meta property="og:image" content="images/thunder.webp">
+<meta property="og:locale" content="en_PH">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- Axes trimmed to what is actually set: Bodoni 500-italic (the motto), 700 and
@@ -99,6 +109,20 @@
     transition:transform .3s var(--ease);
   }
   .skip-link:focus{transform:translateY(0);}
+  /* aria-hidden + tabindex="-1": the real, focusable Viber links already
+     live in the hero and Contact page. This is a convenience duplicate for
+     pointer users, not a second interactive control assistive tech needs
+     to tab past on every single page. */
+  .float-viber{
+    position:fixed;right:1.1rem;bottom:1.1rem;z-index:60;
+    width:52px;height:52px;border-radius:999px;
+    background:var(--accent);color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 8px 20px rgba(25,29,34,0.28);
+    transition:transform .35s var(--ease), box-shadow .35s var(--ease);
+  }
+  .float-viber:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(25,29,34,0.34);}
+  @media print{.float-viber{display:none;}}
   /* Grid and flex children carry min-width:auto, so a child that is wider than
      the track holds the track open instead of shrinking — the 460px spec
      tables did exactly that and dragged the whole document past the viewport
@@ -319,6 +343,7 @@
   }
   .hero-caption h1{font-size:clamp(1.45rem,3.1vw,2.5rem);font-weight:500;max-width:20ch;}
   .hero-caption h1 i{font-style:italic;font-weight:600;}
+  .hero-caption .hero-sub{color:var(--ink-3);font-weight:300;font-size:clamp(0.9rem,1.6vw,1rem);max-width:42ch;margin:0.6rem 0 0;}
   .cta-row{display:flex;gap:0.7rem;flex-wrap:wrap;justify-content:center;}
 
   .spec-strip{
@@ -442,6 +467,22 @@
   .reason h3{font-size:1.2rem;margin-top:0.55rem;font-weight:500;}
   .reason p{color:var(--ink-2);font-size:0.92rem;margin:0.45rem 0 0;font-weight:300;max-width:34ch;}
 
+  /* ---------------- testimonials ---------------- */
+  .testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.1rem;margin-top:2rem;}
+  .testi-card{
+    background:var(--surface);border:1px solid var(--line-soft);border-radius:6px;
+    padding:1.3rem 1.4rem;position:relative;
+  }
+  /* A small notch, not a literal screenshot mockup — reads as "a message"
+     without dressing placeholder text up as a real chat-app capture. */
+  .testi-card::before{
+    content:"";position:absolute;left:1.5rem;bottom:-7px;width:14px;height:14px;
+    background:var(--surface);border-right:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);
+    transform:rotate(45deg);
+  }
+  .testi-card p{margin:0;font-size:0.95rem;color:var(--ink-2);font-weight:300;line-height:1.5;}
+  .testi-who{margin-top:1rem;font-size:0.8rem;color:var(--ink-3);font-family:"IBM Plex Mono",monospace;}
+
   /* ---------------- cta band ---------------- */
   .ctaband{background:var(--ink);color:#fff;padding:clamp(2.6rem,5vw,4rem) 0;}
   .ctaband .row{display:flex;justify-content:space-between;align-items:center;gap:1.6rem;flex-wrap:wrap;}
@@ -527,6 +568,21 @@
   .stat{border-top:1px solid var(--line);padding-top:0.7rem;}
   .stat .v{font-family:"Bodoni Moda",Georgia,serif;font-size:2.6rem;line-height:1;font-weight:700;}
   .stat .k{font-size:0.85rem;color:var(--ink-3);margin-top:0.35rem;font-weight:300;}
+  /* Dashed border, not a fake photo: a stock image of a person here would
+     claim to show what the client looks like, which is a worse kind of
+     placeholder than honestly-labeled empty space. Same principle as the
+     map-note further down. */
+  .about-photo-note{
+    aspect-ratio:4/3;max-width:280px;margin-bottom:1.4rem;
+    border:1px dashed var(--line);border-radius:6px;
+    display:flex;align-items:center;justify-content:center;
+    color:var(--ink-3);font-size:0.85rem;text-align:center;padding:1rem;
+  }
+  .badge-row{display:flex;flex-wrap:wrap;gap:0.7rem;padding:0 0 clamp(2.4rem,5vw,4rem);}
+  .trust-badge{
+    font-size:0.82rem;color:var(--ink-2);background:var(--surface-2);
+    border:1px solid var(--line-soft);border-radius:999px;padding:0.5rem 1.1rem;
+  }
   @media (max-width:860px){.about{grid-template-columns:1fr;gap:2rem;}}
 
   /* ---------------- contact ---------------- */
@@ -559,6 +615,8 @@
   form .btn{align-self:flex-start;}
   .demo-note{font-size:0.78rem;color:var(--ink-3);margin:-0.3rem 0 0;font-weight:300;}
   .map-note{margin-top:1.6rem;border:1px dashed var(--line);border-radius:6px;padding:1.3rem;font-size:0.85rem;color:var(--ink-3);font-weight:300;}
+  .map-wrap{margin-top:1.6rem;}
+  .map-wrap iframe{display:block;filter:grayscale(0.15) contrast(1.02);}
   @media (max-width:860px){.contact{grid-template-columns:1fr;gap:2rem;}}
 
   /* ---------------- footer ---------------- */
@@ -595,8 +653,8 @@
     <a class="brand" data-link data-route="home" href="#/">
       <img class="brand-mark" src="images/logo-mark.webp" alt="" width="34" height="34">
       <span class="brand-type">
-        <span class="b1">Foton</span>
-        <span class="b2">San Pablo</span>
+        <span class="b1">[Your Name]</span>
+        <span class="b2">Foton Sales Rep</span>
       </span>
     </a>
     <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navLinks">Menu</button>
@@ -618,8 +676,8 @@
   <div class="hero">
     <div class="hero-top">
       <div>
-        <div class="name">Foton San Pablo</div>
-        <div class="tagline">We sell Dreams</div>
+        <div class="name">[Your Name]</div>
+        <div class="tagline">Trusted Foton Sales Rep · San Pablo City, Laguna</div>
       </div>
       <div class="unit-meta" id="heroUnitMeta">UNIT 001 · THUNDER · 2026</div>
     </div>
@@ -635,9 +693,10 @@
 
     <div class="hero-caption">
       <h1>Built for the route San Pablo <i>actually drives</i>.</h1>
+      <p class="hero-sub">Direct line to [Your Name] — Foton sales rep working with Foton San Pablo. No showroom queue, just a message.</p>
       <div class="cta-row">
-        <a class="btn" data-link data-route="models" href="#/models">View the Lineup <span class="pip">&rarr;</span></a>
-        <a class="btn btn-ghost" data-link data-route="contact" href="#/contact">Talk to Sales</a>
+        <a class="btn" href="viber://chat?number=%2B639170000000">Chat on Viber <span class="pip">&rarr;</span></a>
+        <a class="btn btn-ghost" href="tel:+639170000000">Call Now</a>
       </div>
     </div>
 
@@ -686,10 +745,43 @@
     </div>
   </div>
 
+  <div class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Buyer Notes</span>
+          <h2>What past buyers say</h2>
+          <p>Sample quotes for this demo build — real customer messages replace these before this goes live.</p>
+        </div>
+      </div>
+      <div class="testi-grid">
+        <div class="testi-card">
+          <p>“Quick replies, no pressure, and he walked me through the whole financing process step by step.”</p>
+          <div class="testi-who">Miguel R. — Biñan, Laguna</div>
+        </div>
+        <div class="testi-card">
+          <p>“Sent photos and specs right away on Viber. Made comparing units so much easier before I even visited.”</p>
+          <div class="testi-who">Carla D. — Calamba</div>
+        </div>
+        <div class="testi-card">
+          <p>“Straightforward about pricing from the start. No surprises once we got to the paperwork.”</p>
+          <div class="testi-who">Noel A. — Los Baños</div>
+        </div>
+        <div class="testi-card">
+          <p>“Helped us get a fleet quote for three units. Saved a lot of back-and-forth with the bank.”</p>
+          <div class="testi-who">Ramon S. — Sta. Cruz</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="ctaband">
     <div class="wrap row">
-      <h2>See a unit in person before you commit.</h2>
-      <a class="btn" data-link data-route="contact" href="#/contact">Schedule a Viewing <span class="pip">&rarr;</span></a>
+      <h2>Ready to talk about a unit?</h2>
+      <div class="cta-row">
+        <a class="btn" href="viber://chat?number=%2B639170000000">Chat on Viber <span class="pip">&rarr;</span></a>
+        <a class="btn btn-ghost" data-link data-route="contact" href="#/contact">Schedule a Viewing</a>
+      </div>
     </div>
   </div>
 </section>
@@ -699,7 +791,7 @@
   <div class="page-head">
     <div class="wrap">
       <h1>Five units. One lot.</h1>
-      <p>Specs cover the base configuration sold at San Pablo. Ask sales about dropside, wing van and F-van bodies where the platform supports them.</p>
+      <p>Specs cover the base configuration sold at San Pablo. Ask me about dropside, wing van and F-van bodies where the platform supports them.</p>
     </div>
   </div>
   <div class="wrap">
@@ -711,19 +803,23 @@
 <section data-page="financing" hidden>
   <div class="page-head">
     <div class="wrap">
-      <h1>Terms built around cash flow.</h1>
-      <p>Bank financing, in-house amortization or straight cash. Sales works out the structure before you sign anything.</p>
+      <h1>Flexible payment plans available.</h1>
+      <p>Bank financing, in-house amortization or straight cash — message me on Viber for a free quote before you commit to anything.</p>
+      <div class="cta-row" style="margin-top:1.2rem;">
+        <a class="btn" href="viber://chat?number=%2B639170000000&text=Hi%2C%20I%27d%20like%20a%20free%20financing%20quote">Get a Free Quote on Viber <span class="pip">&rarr;</span></a>
+      </div>
     </div>
   </div>
   <div class="wrap split">
     <div>
-      <h2 style="font-size:1.45rem;font-weight:500;">How approval runs here</h2>
+      <h2 style="font-size:1.45rem;font-weight:500;">How approval runs</h2>
       <ul class="steps">
         <li><span class="n">01</span><div><strong>Pick the unit and body type.</strong><span>Dropside, F-van or MPV changes the total price.</span></div></li>
         <li><span class="n">02</span><div><strong>Submit two IDs and proof of income.</strong><span>Payslips, ITR, or six months of bank statements if self-employed.</span></div></li>
-        <li><span class="n">03</span><div><strong>Choose bank or in-house terms.</strong><span>Sales runs both sets of numbers side by side.</span></div></li>
+        <li><span class="n">03</span><div><strong>Choose bank or in-house terms.</strong><span>I run both sets of numbers side by side, so you see the real difference.</span></div></li>
         <li><span class="n">04</span><div><strong>Down payment, then release.</strong><span>Most units release within three to five banking days of approval.</span></div></li>
       </ul>
+      <p class="fine" style="margin-top:1.2rem;">We work with [bank / financing partner names] for easy installment plans — ask me which one fits your situation best.</p>
       <h3 style="font-size:1.05rem;margin-top:2rem;font-weight:500;">What to bring</h3>
       <ul class="doc-list">
         <li>Two government-issued IDs</li>
@@ -787,21 +883,33 @@
 <section data-page="about" hidden>
   <div class="page-head">
     <div class="wrap">
-      <h1>One lot on the National Highway.</h1>
-      <p>Serving San Pablo City and the towns around the Seven Lakes, from a single property where sales, financing and service sit together.</p>
+      <h1>Hi, I'm [Your Name].</h1>
+      <p>A Foton sales representative working with Foton San Pablo — helping San Pablo City and nearby buyers find the right van, truck or pickup since [year].</p>
     </div>
   </div>
   <div class="wrap about">
     <div>
-      <p>Foton Philippines San Pablo sells and services the Foton commercial lineup — Thunder, Tornado, Traveller, Gratour and Transvan — from one lot along the National Highway in San Pablo City, Laguna.</p>
-      <p>Most buyers here run a business. Rice traders moving sacks toward Sta. Cruz, delivery operators serving Calamba and Los Baños, cooperatives shuttling workers out to the coconut and coffee farms past the city proper. The lineup is stocked around that kind of driving: short-haul, loaded, daily.</p>
-      <p>Sales, financing and the service bays share the same property, so a unit bought here gets serviced here, by technicians who know the exact trims sold on this lot.</p>
+      <!-- An actual client photo goes here once he provides one. A stock or
+           placeholder photo of a person is deliberately NOT used — that would
+           claim to show what he looks like, which is a different, worse kind
+           of dishonest than a bracketed text placeholder. -->
+      <div class="about-photo-note">Client photo goes here</div>
+      <p>I sell the full Foton commercial lineup — Thunder, Tornado, Traveller, Gratour and Transvan — for buyers across San Pablo City and the towns around the Seven Lakes.</p>
+      <p>Most people I work with run a business: rice traders moving sacks toward Sta. Cruz, delivery operators serving Calamba and Los Baños, cooperatives shuttling workers out to the coconut and coffee farms past the city proper. I help match the right unit to that kind of driving — short-haul, loaded, daily — and walk through financing so the numbers make sense before you sign anything.</p>
+      <p>Every unit is backed by Foton San Pablo's own service bays and standard warranty, so a vehicle bought through me gets serviced properly, not passed off to a stranger.</p>
     </div>
     <div class="stats">
-      <div class="stat"><div class="v">5</div><div class="k">Foton model lines in stock</div></div>
-      <div class="stat"><div class="v">4</div><div class="k">Service bays on-site</div></div>
-      <div class="stat"><div class="v">3 yr</div><div class="k">Standard warranty coverage</div></div>
-      <div class="stat"><div class="v">7</div><div class="k">Lakes in the city this lot calls home</div></div>
+      <div class="stat"><div class="v">[X]+</div><div class="k">Years selling Foton vehicles</div></div>
+      <div class="stat"><div class="v">[X]+</div><div class="k">Buyers helped in San Pablo and nearby towns</div></div>
+      <div class="stat"><div class="v">5</div><div class="k">Foton model lines available</div></div>
+      <div class="stat"><div class="v">3 yr</div><div class="k">Standard warranty, serviced at Foton San Pablo</div></div>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="badge-row">
+      <span class="trust-badge">Authorized Foton Sales Rep</span>
+      <span class="trust-badge">Direct Line, No Showroom Queue</span>
+      <span class="trust-badge">Financing Help Included</span>
     </div>
   </div>
 </section>
@@ -810,29 +918,40 @@
 <section data-page="contact" hidden>
   <div class="page-head">
     <div class="wrap">
-      <h1>Talk to sales.</h1>
-      <p>This is a portfolio demo. The details below stand in for a real showroom address, phone line and inquiry form.</p>
+      <h1>Get in touch.</h1>
+      <p>Fastest way to reach me is Viber — real phone, address and hours below stand in for [Your Name]'s actual details.</p>
+      <div class="cta-row" style="margin-top:1.2rem;">
+        <a class="btn" href="viber://chat?number=%2B639170000000">Chat on Viber <span class="pip">&rarr;</span></a>
+        <a class="btn btn-ghost" href="tel:+639170000000">Call Now</a>
+      </div>
     </div>
   </div>
   <div class="wrap contact">
     <div>
       <div class="info">
-        <h3>Showroom</h3>
+        <h3>Based at Foton San Pablo</h3>
         <p>National Highway, Brgy. San Isidro</p>
         <p>San Pablo City, Laguna 4000</p>
       </div>
       <div class="info">
         <h3>Hours</h3>
         <p>Monday to Saturday, 8:00 AM – 6:00 PM</p>
-        <p>Sunday, 9:00 AM – 3:00 PM, sales only</p>
+        <p>Sunday, 9:00 AM – 3:00 PM</p>
       </div>
       <div class="info">
-        <h3>Reach us</h3>
-        <p>Sales (049) 000-0000</p>
-        <p>Service (049) 000-0001</p>
-        <p>sales@fotonsanpablo.example</p>
+        <h3>Reach me</h3>
+        <p>Viber / Mobile: +63 917 000 0000</p>
+        <p><a href="https://facebook.com/" target="_blank" rel="noopener">facebook.com/[YourPageHere]</a></p>
+        <p>[you]@example.com</p>
       </div>
-      <div class="map-note">Map embed left out of this demo. A live build would drop a pin on the National Highway location here.</div>
+      <div class="map-wrap">
+        <iframe
+          src="https://www.google.com/maps?q=Foton+San+Pablo,+National+Highway,+San+Pablo+City,+Laguna&output=embed"
+          width="100%" height="220" style="border:0;border-radius:6px;" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Map pin near Foton San Pablo, National Highway, San Pablo City, Laguna"></iframe>
+        <p class="fine" style="margin-top:0.6rem;">Approximate pin — swap in the exact address once confirmed.</p>
+      </div>
     </div>
     <form id="inquiryForm" novalidate>
       <div class="field">
@@ -878,7 +997,7 @@
         <img class="foot-logo" src="images/logo-reversed.webp"
              alt="Foton San Pablo" width="200" height="145" loading="lazy">
         <p class="foot-motto">We sell Dreams.</p>
-        <p>An independent Foton dealership on the National Highway, San Pablo City, Laguna. Sales, financing and service under one roof.</p>
+        <p>[Your Name], a Foton sales representative working with Foton San Pablo on the National Highway, San Pablo City, Laguna. Not the official Foton dealership site.</p>
       </div>
       <div>
         <h4>Lineup</h4>
@@ -891,7 +1010,7 @@
         </ul>
       </div>
       <div>
-        <h4>Dealership</h4>
+        <h4>More</h4>
         <ul>
           <li><a data-link data-route="financing" href="#/financing">Financing</a></li>
           <li><a data-link data-route="service" href="#/service">Service</a></li>
@@ -901,11 +1020,21 @@
       </div>
     </div>
     <div class="foot-bottom">
-      <span>Portfolio demo build. Not an official Foton Motor Philippines property.</span>
+      <span>Personal site of [Your Name]. For inquiries, contact +63 917 000 0000. Not an official Foton Motor Philippines property.</span>
       <span>San Pablo City, Laguna</span>
     </div>
   </div>
 </footer>
+
+<!-- Floating Viber CTA — one tap from anywhere on the site, the fastest
+     path for a PH mobile buyer. Hidden on print and from screen readers
+     as a decorative duplicate; the same action exists as a real link in
+     the hero and the Contact page for keyboard/AT users. -->
+<a class="float-viber" href="viber://chat?number=%2B639170000000" aria-hidden="true" tabindex="-1">
+  <svg width="24" height="24" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 9.5c0-3.6 3.1-6.5 7-6.5s7 2.9 7 6.5-3.1 6.5-7 6.5c-.9 0-1.8-.15-2.6-.44L4 17l1.1-3.2A6.3 6.3 0 0 1 3 9.5z"/>
+  </svg>
+</a>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
@@ -1175,7 +1304,7 @@
 
   /* ---------- routing ---------- */
   var routes = ['home','models','financing','service','about','contact'];
-  var SITE = 'Foton Philippines San Pablo';
+  var SITE = '[Your Name] – Foton San Pablo';
   var ROUTE_TITLES = {
     home:SITE,
     models:'Models — '+SITE,
@@ -1275,7 +1404,7 @@
 
   function checkPhone(){
     var input = $('phone'), v = input.value.trim();
-    if(!v) return setErr(input, 'Enter a number sales can reach you on.');
+    if(!v) return setErr(input, 'Enter a number I can reach you on.');
     var digits = v.replace(/\D/g,'');
     if(digits.length < 10 || digits.length > 13){
       return setErr(input, 'That is not a complete mobile number. Use the 09XX XXX XXXX format.');
@@ -1303,7 +1432,7 @@
       return;
     }
     formStatus.textContent = 'Thanks, ' + $('name').value.trim().split(' ')[0] +
-      '. This is a demo build, so nothing was sent — a live site would route this to the sales desk.';
+      '. This is a demo build, so nothing was sent — a live site would message this straight to me on Viber.';
     formStatus.hidden = false;
     form.reset();
   });
