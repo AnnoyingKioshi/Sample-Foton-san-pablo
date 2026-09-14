@@ -1,5 +1,16 @@
-<title>Foton Philippines San Pablo</title>
+<meta charset="utf-8">
+<title>Jonathan Ruelo – Foton San Pablo</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- SEO + Open Graph. Jonathan Ruelo, the phone number and the OG image path
+     are placeholders — real values go in before this ever gets shared. -->
+<meta name="description" content="Trusted Foton sales rep in San Pablo City, Laguna. Vans, trucks and pickups from the Foton lineup, financing help, and a direct line on Viber — no showroom small talk required.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Jonathan Ruelo – Foton San Pablo">
+<meta property="og:title" content="Trusted Foton Sales in San Pablo City">
+<meta property="og:description" content="Direct line to Jonathan Ruelo, Foton sales rep in San Pablo City, Laguna. Vans, trucks and pickups, financing help, Viber inquiries welcome.">
+<meta property="og:image" content="images/thunder.webp">
+<meta property="og:locale" content="en_PH">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- Axes trimmed to what is actually set: Bodoni 500-italic (the motto), 700 and
@@ -98,6 +109,20 @@
     transition:transform .3s var(--ease);
   }
   .skip-link:focus{transform:translateY(0);}
+  /* aria-hidden + tabindex="-1": the real, focusable Viber links already
+     live in the hero and Contact page. This is a convenience duplicate for
+     pointer users, not a second interactive control assistive tech needs
+     to tab past on every single page. */
+  .float-viber{
+    position:fixed;right:1.1rem;bottom:1.1rem;z-index:60;
+    width:52px;height:52px;border-radius:999px;
+    background:var(--accent);color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 8px 20px rgba(25,29,34,0.28);
+    transition:transform .35s var(--ease), box-shadow .35s var(--ease);
+  }
+  .float-viber:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(25,29,34,0.34);}
+  @media print{.float-viber{display:none;}}
   /* Grid and flex children carry min-width:auto, so a child that is wider than
      the track holds the track open instead of shrinking — the 460px spec
      tables did exactly that and dragged the whole document past the viewport
@@ -318,6 +343,7 @@
   }
   .hero-caption h1{font-size:clamp(1.45rem,3.1vw,2.5rem);font-weight:500;max-width:20ch;}
   .hero-caption h1 i{font-style:italic;font-weight:600;}
+  .hero-caption .hero-sub{color:var(--ink-3);font-weight:300;font-size:clamp(0.9rem,1.6vw,1rem);max-width:42ch;margin:0.6rem 0 0;}
   .cta-row{display:flex;gap:0.7rem;flex-wrap:wrap;justify-content:center;}
 
   .spec-strip{
@@ -425,7 +451,8 @@
   .v-card .unit{font-family:"IBM Plex Mono",monospace;font-size:0.65rem;letter-spacing:0.12em;color:var(--ink-3);}
   .v-card h3{font-size:1.3rem;margin-top:0.35rem;font-weight:500;}
   .v-card .cat{font-size:0.82rem;color:var(--ink-3);margin-top:0.2rem;font-weight:300;}
-  .v-card .price{margin-top:auto;padding-top:0.9rem;font-family:"IBM Plex Mono",monospace;font-size:0.88rem;color:var(--steel);font-weight:500;}
+  .v-card .price{margin-top:auto;padding-top:0.9rem;font-size:0.85rem;color:var(--accent-text);font-weight:500;display:inline-flex;align-items:center;gap:0.45rem;}
+  .v-card .price::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--accent);flex:0 0 auto;}
   .v-card .glare{
     position:absolute;inset:0;pointer-events:none;border-radius:6px;
     background:linear-gradient(135deg,rgba(255,255,255,0.55),transparent 52%);
@@ -440,6 +467,22 @@
   .reason .n{font-family:"IBM Plex Mono",monospace;font-size:0.72rem;color:var(--accent-text);letter-spacing:0.1em;}
   .reason h3{font-size:1.2rem;margin-top:0.55rem;font-weight:500;}
   .reason p{color:var(--ink-2);font-size:0.92rem;margin:0.45rem 0 0;font-weight:300;max-width:34ch;}
+
+  /* ---------------- testimonials ---------------- */
+  .testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.1rem;margin-top:2rem;}
+  .testi-card{
+    background:var(--surface);border:1px solid var(--line-soft);border-radius:6px;
+    padding:1.3rem 1.4rem;position:relative;
+  }
+  /* A small notch, not a literal screenshot mockup — reads as "a message"
+     without dressing placeholder text up as a real chat-app capture. */
+  .testi-card::before{
+    content:"";position:absolute;left:1.5rem;bottom:-7px;width:14px;height:14px;
+    background:var(--surface);border-right:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);
+    transform:rotate(45deg);
+  }
+  .testi-card p{margin:0;font-size:0.95rem;color:var(--ink-2);font-weight:300;line-height:1.5;}
+  .testi-who{margin-top:1rem;font-size:0.8rem;color:var(--ink-3);font-family:"IBM Plex Mono",monospace;}
 
   /* ---------------- cta band ---------------- */
   .ctaband{background:var(--ink);color:#fff;padding:clamp(2.6rem,5vw,4rem) 0;}
@@ -470,6 +513,10 @@
     padding:1.4rem;aspect-ratio:16/10;
   }
   .m-shot img{max-height:100%;object-fit:contain;}
+  /* m-body fills the remaining card height (matching .v-card .meta below) so
+     price-row can pin to the bottom — otherwise a longer desc or a third spec
+     row pushes "Ask for a quote" out of line with the shorter card beside it. */
+  .m-body{display:flex;flex-direction:column;flex:1 1 auto;}
   .m-body .unit{font-family:"IBM Plex Mono",monospace;font-size:0.66rem;letter-spacing:0.12em;color:var(--ink-3);}
   .m-body h2{font-size:clamp(1.5rem,2.6vw,2.1rem);margin-top:0.3rem;font-weight:500;}
   .m-body .cat{color:var(--ink-3);font-size:0.9rem;margin-top:0.2rem;font-weight:300;}
@@ -478,8 +525,9 @@
   .kv{border-top:1px solid var(--line-soft);padding-top:0.4rem;}
   .kv .k{font-size:0.66rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-3);font-family:"IBM Plex Mono",monospace;}
   .kv .v{font-weight:500;margin-top:0.15rem;font-size:0.92rem;}
-  .price-row{display:flex;align-items:center;gap:1.1rem;margin-top:1.4rem;flex-wrap:wrap;}
-  .price-row .price{font-family:"IBM Plex Mono",monospace;font-size:1.02rem;color:var(--steel);font-weight:500;}
+  .price-row{display:flex;align-items:center;gap:1.1rem;margin-top:auto;padding-top:1.4rem;flex-wrap:wrap;}
+  .price-row .price{font-size:0.95rem;color:var(--accent-text);font-weight:500;display:inline-flex;align-items:center;gap:0.5rem;}
+  .price-row .price::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent);flex:0 0 auto;}
   @media (max-width:860px){
     .models-grid{grid-template-columns:1fr;}
     .model-card.featured{flex-direction:column;align-items:stretch;gap:1rem;}
@@ -526,6 +574,21 @@
   .stat{border-top:1px solid var(--line);padding-top:0.7rem;}
   .stat .v{font-family:"Bodoni Moda",Georgia,serif;font-size:2.6rem;line-height:1;font-weight:700;}
   .stat .k{font-size:0.85rem;color:var(--ink-3);margin-top:0.35rem;font-weight:300;}
+  /* Dashed border, not a fake photo: a stock image of a person here would
+     claim to show what the client looks like, which is a worse kind of
+     placeholder than honestly-labeled empty space. Same principle as the
+     map-note further down. */
+  .about-photo-note{
+    aspect-ratio:4/3;max-width:280px;margin-bottom:1.4rem;
+    border:1px dashed var(--line);border-radius:6px;
+    display:flex;align-items:center;justify-content:center;
+    color:var(--ink-3);font-size:0.85rem;text-align:center;padding:1rem;
+  }
+  .badge-row{display:flex;flex-wrap:wrap;gap:0.7rem;padding:0 0 clamp(2.4rem,5vw,4rem);}
+  .trust-badge{
+    font-size:0.82rem;color:var(--ink-2);background:var(--surface-2);
+    border:1px solid var(--line-soft);border-radius:999px;padding:0.5rem 1.1rem;
+  }
   @media (max-width:860px){.about{grid-template-columns:1fr;gap:2rem;}}
 
   /* ---------------- contact ---------------- */
@@ -558,6 +621,8 @@
   form .btn{align-self:flex-start;}
   .demo-note{font-size:0.78rem;color:var(--ink-3);margin:-0.3rem 0 0;font-weight:300;}
   .map-note{margin-top:1.6rem;border:1px dashed var(--line);border-radius:6px;padding:1.3rem;font-size:0.85rem;color:var(--ink-3);font-weight:300;}
+  .map-wrap{margin-top:1.6rem;}
+  .map-wrap iframe{display:block;filter:grayscale(0.15) contrast(1.02);}
   @media (max-width:860px){.contact{grid-template-columns:1fr;gap:2rem;}}
 
   /* ---------------- footer ---------------- */
@@ -594,8 +659,8 @@
     <a class="brand" data-link data-route="home" href="#/">
       <img class="brand-mark" src="images/logo-mark.webp" alt="" width="34" height="34">
       <span class="brand-type">
-        <span class="b1">Foton</span>
-        <span class="b2">San Pablo</span>
+        <span class="b1">Jonathan Ruelo</span>
+        <span class="b2">Foton Sales Rep</span>
       </span>
     </a>
     <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navLinks">Menu</button>
@@ -617,8 +682,8 @@
   <div class="hero">
     <div class="hero-top">
       <div>
-        <div class="name">Foton San Pablo</div>
-        <div class="tagline">We sell Dreams</div>
+        <div class="name">Jonathan Ruelo</div>
+        <div class="tagline">Trusted Foton Sales Rep · San Pablo City, Laguna</div>
       </div>
       <div class="unit-meta" id="heroUnitMeta">UNIT 001 · THUNDER · 2026</div>
     </div>
@@ -634,9 +699,10 @@
 
     <div class="hero-caption">
       <h1>Built for the route San Pablo <i>actually drives</i>.</h1>
+      <p class="hero-sub">Direct line to Jonathan Ruelo — Foton sales rep working with Foton San Pablo. No showroom queue, just a message.</p>
       <div class="cta-row">
-        <a class="btn" data-link data-route="models" href="#/models">View the Lineup <span class="pip">&rarr;</span></a>
-        <a class="btn btn-ghost" data-link data-route="contact" href="#/contact">Talk to Sales</a>
+        <a class="btn" href="viber://chat?number=%2B639163174760">Chat on Viber <span class="pip">&rarr;</span></a>
+        <a class="btn btn-ghost" href="tel:+639163174760">Call Now</a>
       </div>
     </div>
 
@@ -647,8 +713,8 @@
     <div class="wrap">
       <div class="section-head">
         <div>
-          <span class="eyebrow">Units 001–005</span>
-          <h2>Five units on the lot</h2>
+          <span class="eyebrow">Units 001–014</span>
+          <h2>Fourteen units on the lot</h2>
           <p>Filter the rail above to swap the featured unit, or browse the full spec sheets.</p>
         </div>
         <a class="btn btn-ghost" data-link data-route="models" href="#/models">Full specs <span class="pip">&rarr;</span></a>
@@ -685,10 +751,34 @@
     </div>
   </div>
 
+  <div class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Buyer Notes</span>
+          <h2>What past buyers say</h2>
+        </div>
+      </div>
+      <div class="testi-grid">
+        <div class="testi-card">
+          <p>“Good service.”</p>
+          <div class="testi-who">Buyer from Batangas</div>
+        </div>
+        <div class="testi-card">
+          <p>“Great for cars for business.”</p>
+          <div class="testi-who">Buyer from Pasig</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="ctaband">
     <div class="wrap row">
-      <h2>See a unit in person before you commit.</h2>
-      <a class="btn" data-link data-route="contact" href="#/contact">Schedule a Viewing <span class="pip">&rarr;</span></a>
+      <h2>Ready to talk about a unit?</h2>
+      <div class="cta-row">
+        <a class="btn" href="viber://chat?number=%2B639163174760">Chat on Viber <span class="pip">&rarr;</span></a>
+        <a class="btn btn-ghost" data-link data-route="contact" href="#/contact">Schedule a Viewing</a>
+      </div>
     </div>
   </div>
 </section>
@@ -697,8 +787,8 @@
 <section data-page="models" hidden>
   <div class="page-head">
     <div class="wrap">
-      <h1>Five units. One lot.</h1>
-      <p>Specs cover the base configuration sold at San Pablo. Ask sales about dropside, wing van and F-van bodies where the platform supports them.</p>
+      <h1>Fourteen units. One lot.</h1>
+      <p>Specs cover the base configuration sold at San Pablo. Ask me about dropside, wing van and F-van bodies where the platform supports them.</p>
     </div>
   </div>
   <div class="wrap">
@@ -710,19 +800,23 @@
 <section data-page="financing" hidden>
   <div class="page-head">
     <div class="wrap">
-      <h1>Terms built around cash flow.</h1>
-      <p>Bank financing, in-house amortization or straight cash. Sales works out the structure before you sign anything.</p>
+      <h1>Flexible payment plans available.</h1>
+      <p>Bank financing, in-house amortization or straight cash — message me on Viber for a free quote before you commit to anything.</p>
+      <div class="cta-row" style="margin-top:1.2rem;">
+        <a class="btn" href="viber://chat?number=%2B639163174760&text=Hi%2C%20I%27d%20like%20a%20free%20financing%20quote">Get a Free Quote on Viber <span class="pip">&rarr;</span></a>
+      </div>
     </div>
   </div>
   <div class="wrap split">
     <div>
-      <h2 style="font-size:1.45rem;font-weight:500;">How approval runs here</h2>
+      <h2 style="font-size:1.45rem;font-weight:500;">How approval runs</h2>
       <ul class="steps">
         <li><span class="n">01</span><div><strong>Pick the unit and body type.</strong><span>Dropside, F-van or MPV changes the total price.</span></div></li>
         <li><span class="n">02</span><div><strong>Submit two IDs and proof of income.</strong><span>Payslips, ITR, or six months of bank statements if self-employed.</span></div></li>
-        <li><span class="n">03</span><div><strong>Choose bank or in-house terms.</strong><span>Sales runs both sets of numbers side by side.</span></div></li>
+        <li><span class="n">03</span><div><strong>Choose bank or in-house terms.</strong><span>I run both sets of numbers side by side, so you see the real difference.</span></div></li>
         <li><span class="n">04</span><div><strong>Down payment, then release.</strong><span>Most units release within three to five banking days of approval.</span></div></li>
       </ul>
+      <p class="fine" style="margin-top:1.2rem;">We work with [bank / financing partner names] for easy installment plans — ask me which one fits your situation best.</p>
       <h3 style="font-size:1.05rem;margin-top:2rem;font-weight:500;">What to bring</h3>
       <ul class="doc-list">
         <li>Two government-issued IDs</li>
@@ -732,19 +826,19 @@
       </ul>
     </div>
     <div>
-      <h2 style="font-size:1.45rem;font-weight:500;">Sample computation</h2>
+      <h2 style="font-size:1.45rem;font-weight:500;">How the numbers usually shape up</h2>
       <div class="table-wrap">
         <table>
-          <caption class="sr-only">Sample financing computation by unit: SRP, 20% down payment, and indicative monthly amortisation over 60 months.</caption>
-          <thead><tr><th scope="col">Unit</th><th scope="col">SRP</th><th scope="col">20% DP</th><th scope="col">Monthly*</th></tr></thead>
+          <caption class="sr-only">Typical financing structure: down payment share and common loan terms.</caption>
+          <thead><tr><th scope="col">Variable</th><th scope="col">Typical range</th></tr></thead>
           <tbody>
-            <tr><td>Gratour Dropside</td><td class="mono">₱570,000</td><td class="mono">₱114,000</td><td class="mono">₱9,800 · 60 mo</td></tr>
-            <tr><td>Thunder 4x2 A/T</td><td class="mono">₱1,290,000</td><td class="mono">₱258,000</td><td class="mono">₱21,600 · 60 mo</td></tr>
-            <tr><td>Traveller XL</td><td class="mono">₱1,680,000</td><td class="mono">₱336,000</td><td class="mono">₱27,900 · 60 mo</td></tr>
+            <tr><td>Down payment</td><td class="mono">20% of SRP, sometimes less with a promo</td></tr>
+            <tr><td>Loan term</td><td class="mono">36, 48 or 60 months</td></tr>
+            <tr><td>Reservation fee</td><td class="mono">Deductible from the down payment</td></tr>
           </tbody>
         </table>
       </div>
-      <p class="fine">*Sample figures for this demo build, not an official quotation. The actual rate depends on the bank, the term and credit standing at the time of application.</p>
+      <p class="fine">General shape only — not a quotation. Send me the unit and your preferred term on Viber and I'll work out real numbers with you, same day.</p>
     </div>
   </div>
 </section>
@@ -786,21 +880,33 @@
 <section data-page="about" hidden>
   <div class="page-head">
     <div class="wrap">
-      <h1>One lot on the National Highway.</h1>
-      <p>Serving San Pablo City and the towns around the Seven Lakes, from a single property where sales, financing and service sit together.</p>
+      <h1>Hi, I'm Jonathan Ruelo.</h1>
+      <p>A Foton sales representative working with Foton San Pablo — helping San Pablo City and nearby buyers find the right van, truck or pickup since 2019.</p>
     </div>
   </div>
   <div class="wrap about">
     <div>
-      <p>Foton Philippines San Pablo sells and services the Foton commercial lineup — Thunder, Tornado, Traveller, Gratour and Transvan — from one lot along the National Highway in San Pablo City, Laguna.</p>
-      <p>Most buyers here run a business. Rice traders moving sacks toward Sta. Cruz, delivery operators serving Calamba and Los Baños, cooperatives shuttling workers out to the coconut and coffee farms past the city proper. The lineup is stocked around that kind of driving: short-haul, loaded, daily.</p>
-      <p>Sales, financing and the service bays share the same property, so a unit bought here gets serviced here, by technicians who know the exact trims sold on this lot.</p>
+      <!-- An actual client photo goes here once he provides one. A stock or
+           placeholder photo of a person is deliberately NOT used — that would
+           claim to show what he looks like, which is a different, worse kind
+           of dishonest than a bracketed text placeholder. -->
+      <div class="about-photo-note">Client photo goes here</div>
+      <p>I sell the full Foton commercial lineup — pickups, light trucks, passenger vans, MPVs and heavy-duty trucks across the Thunder, Tornado, Tunland, Traveller, Toano, Gratour, Transvan, Harabas, Hurricane, EST-M, ETX-N and EST430 series — for buyers across San Pablo City and the towns around the Seven Lakes.</p>
+      <p>Most people I work with run a business: rice traders moving sacks toward Sta. Cruz, delivery operators serving Calamba and Los Baños, cooperatives shuttling workers out to the coconut and coffee farms past the city proper. I help match the right unit to that kind of driving — short-haul, loaded, daily — and walk through financing so the numbers make sense before you sign anything.</p>
+      <p>Every unit is backed by Foton San Pablo's own service bays and standard warranty, so a vehicle bought through me gets serviced properly, not passed off to a stranger.</p>
     </div>
     <div class="stats">
-      <div class="stat"><div class="v">5</div><div class="k">Foton model lines in stock</div></div>
-      <div class="stat"><div class="v">4</div><div class="k">Service bays on-site</div></div>
-      <div class="stat"><div class="v">3 yr</div><div class="k">Standard warranty coverage</div></div>
-      <div class="stat"><div class="v">7</div><div class="k">Lakes in the city this lot calls home</div></div>
+      <div class="stat"><div class="v">7+</div><div class="k">Years selling Foton vehicles</div></div>
+      <div class="stat"><div class="v">150+</div><div class="k">Buyers helped in San Pablo and nearby towns</div></div>
+      <div class="stat"><div class="v">14</div><div class="k">Foton model lines available</div></div>
+      <div class="stat"><div class="v">3 yr</div><div class="k">Standard warranty, serviced at Foton San Pablo</div></div>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="badge-row">
+      <span class="trust-badge">Authorized Foton Sales Rep</span>
+      <span class="trust-badge">Direct Line, No Showroom Queue</span>
+      <span class="trust-badge">Financing Help Included</span>
     </div>
   </div>
 </section>
@@ -809,29 +915,40 @@
 <section data-page="contact" hidden>
   <div class="page-head">
     <div class="wrap">
-      <h1>Talk to sales.</h1>
-      <p>This is a portfolio demo. The details below stand in for a real showroom address, phone line and inquiry form.</p>
+      <h1>Get in touch.</h1>
+      <p>Fastest way to reach me is Viber — real phone, address and hours below stand in for Jonathan Ruelo's actual details.</p>
+      <div class="cta-row" style="margin-top:1.2rem;">
+        <a class="btn" href="viber://chat?number=%2B639163174760">Chat on Viber <span class="pip">&rarr;</span></a>
+        <a class="btn btn-ghost" href="tel:+639163174760">Call Now</a>
+      </div>
     </div>
   </div>
   <div class="wrap contact">
     <div>
       <div class="info">
-        <h3>Showroom</h3>
+        <h3>Based at Foton San Pablo</h3>
         <p>National Highway, Brgy. San Isidro</p>
         <p>San Pablo City, Laguna 4000</p>
       </div>
       <div class="info">
         <h3>Hours</h3>
         <p>Monday to Saturday, 8:00 AM – 6:00 PM</p>
-        <p>Sunday, 9:00 AM – 3:00 PM, sales only</p>
+        <p>Sunday, 9:00 AM – 3:00 PM</p>
       </div>
       <div class="info">
-        <h3>Reach us</h3>
-        <p>Sales (049) 000-0000</p>
-        <p>Service (049) 000-0001</p>
-        <p>sales@fotonsanpablo.example</p>
+        <h3>Reach me</h3>
+        <p>Viber / Mobile: +63 916 317 4760</p>
+        <p><a href="https://www.facebook.com/ruelord" target="_blank" rel="noopener">facebook.com/ruelord</a></p>
+        <p><a href="mailto:ruelo.fotonsanpablo@gmail.com">ruelo.fotonsanpablo@gmail.com</a></p>
       </div>
-      <div class="map-note">Map embed left out of this demo. A live build would drop a pin on the National Highway location here.</div>
+      <div class="map-wrap">
+        <iframe
+          src="https://www.google.com/maps?q=Foton+San+Pablo,+National+Highway,+San+Pablo+City,+Laguna&output=embed"
+          width="100%" height="220" style="border:0;border-radius:6px;" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Map pin near Foton San Pablo, National Highway, San Pablo City, Laguna"></iframe>
+        <p class="fine" style="margin-top:0.6rem;">Approximate pin — swap in the exact address once confirmed.</p>
+      </div>
     </div>
     <form id="inquiryForm" novalidate>
       <div class="field">
@@ -877,7 +994,7 @@
         <img class="foot-logo" src="images/logo-reversed.webp"
              alt="Foton San Pablo" width="200" height="145" loading="lazy">
         <p class="foot-motto">We sell Dreams.</p>
-        <p>An independent Foton dealership on the National Highway, San Pablo City, Laguna. Sales, financing and service under one roof.</p>
+        <p>Jonathan Ruelo, a Foton sales representative working with Foton San Pablo on the National Highway, San Pablo City, Laguna. Not the official Foton dealership site.</p>
       </div>
       <div>
         <h4>Lineup</h4>
@@ -887,10 +1004,19 @@
           <li><a data-link data-route="models" href="#/models">Traveller</a></li>
           <li><a data-link data-route="models" href="#/models">Gratour</a></li>
           <li><a data-link data-route="models" href="#/models">Transvan</a></li>
+          <li><a data-link data-route="models" href="#/models">Harabas TM300</a></li>
+          <li><a data-link data-route="models" href="#/models">Harabas Miler</a></li>
+          <li><a data-link data-route="models" href="#/models">Tunland V7</a></li>
+          <li><a data-link data-route="models" href="#/models">Tunland V9</a></li>
+          <li><a data-link data-route="models" href="#/models">Toano</a></li>
+          <li><a data-link data-route="models" href="#/models">Hurricane EST-M</a></li>
+          <li><a data-link data-route="models" href="#/models">EST-M</a></li>
+          <li><a data-link data-route="models" href="#/models">ETX-N</a></li>
+          <li><a data-link data-route="models" href="#/models">EST430</a></li>
         </ul>
       </div>
       <div>
-        <h4>Dealership</h4>
+        <h4>More</h4>
         <ul>
           <li><a data-link data-route="financing" href="#/financing">Financing</a></li>
           <li><a data-link data-route="service" href="#/service">Service</a></li>
@@ -900,11 +1026,21 @@
       </div>
     </div>
     <div class="foot-bottom">
-      <span>Portfolio demo build. Not an official Foton Motor Philippines property.</span>
+      <span>Personal site of Jonathan Ruelo. For inquiries, contact +63 916 317 4760. Not an official Foton Motor Philippines property.</span>
       <span>San Pablo City, Laguna</span>
     </div>
   </div>
 </footer>
+
+<!-- Floating Viber CTA — one tap from anywhere on the site, the fastest
+     path for a PH mobile buyer. Hidden on print and from screen readers
+     as a decorative duplicate; the same action exists as a real link in
+     the hero and the Contact page for keyboard/AT users. -->
+<a class="float-viber" href="viber://chat?number=%2B639163174760" aria-hidden="true" tabindex="-1">
+  <svg width="24" height="24" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 9.5c0-3.6 3.1-6.5 7-6.5s7 2.9 7 6.5-3.1 6.5-7 6.5c-.9 0-1.8-.15-2.6-.44L4 17l1.1-3.2A6.3 6.3 0 0 1 3 9.5z"/>
+  </svg>
+</a>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
@@ -915,38 +1051,104 @@
   var vehicles = [
     {
       id:"thunder", unit:"UNIT 001", name:"Thunder", cat:"Pickup · 4x2 / 4x4", group:"Pickups",
-      price:"From ₱1,080,000", img:"images/thunder.webp",
+      price:"Ask for a quote", img:"images/thunder.webp",
       alt:"Foton Thunder pickup truck, front three-quarter view",
       desc:"The volume seller on this lot. A double-cab pickup for daily loading and provincial highway runs, in manual or automatic, 4x2 or 4x4.",
       specs:[["Engine","2.0L Turbodiesel"],["Output","Up to 163 hp"],["Drive","4x2 / 4x4"],["Transmission","6-Speed M/T or A/T"],["Bed Payload","~1,000 kg"],["Seating","5"]]
     },
     {
       id:"tornado", unit:"UNIT 002", name:"Tornado", cat:"Light Truck · MPV / Dropside / F-Van", group:"Light Trucks",
-      price:"From ₱950,000", img:"images/tornado.webp",
+      price:"Ask for a quote", img:"images/tornado.webp",
       alt:"Foton Tornado light truck, front three-quarter view",
       desc:"A cab-and-chassis platform sold in MPV, dropside, F-van and dump bodies. The usual pick for cooperatives running a shuttle or a delivery route.",
       specs:[["Engine","3.7L or 4.2L Diesel"],["GVW Class","M2.6C – M6.1C"],["Transmission","5-Speed M/T"],["Body Options","MPV, Dropside, F-Van, Dump"],["Seating","Up to 25, MPV body"],["Drive","4x2"]]
     },
     {
       id:"traveller", unit:"UNIT 003", name:"Traveller", cat:"Van · Shuttle / Tourist", group:"Passenger Vans",
-      price:"From ₱1,600,000", img:"images/traveller.webp",
+      price:"Ask for a quote", img:"images/traveller.webp",
       alt:"Foton Traveller van, front three-quarter view",
       desc:"A high-roof passenger van for tour operators, church groups and company shuttles moving fifteen or more people in one trip.",
       specs:[["Engine","2.8L Turbodiesel"],["Seating","15–18"],["Transmission","5-Speed M/T"],["Drive","4x2"],["Configuration","XL, high-roof"],["Use Case","Tourist / shuttle"]]
     },
     {
       id:"gratour", unit:"UNIT 004", name:"Gratour", cat:"Entry Pickup / Van", group:"Entry Pickups",
-      price:"From ₱570,000", img:"images/gratour.webp",
+      price:"Ask for a quote", img:"images/gratour.webp",
       alt:"Foton Gratour mini pickup, front three-quarter view",
       desc:"The entry point. A compact pickup and van platform priced for a first commercial vehicle, or a second unit for tight city streets.",
       specs:[["Engine","1.5L Gasoline / Diesel"],["Body Options","Dropside, F-Van, MPV, Wingvan"],["Transmission","5-Speed M/T"],["Payload","~700 kg"],["Drive","4x2"],["Seating","Up to 7, MPV body"]]
     },
     {
       id:"transvan", unit:"UNIT 005", name:"Transvan", cat:"Van · Cargo / Passenger", group:"Cargo Vans",
-      price:"From ₱1,150,000", img:"images/transvan.webp",
+      price:"Ask for a quote", img:"images/transvan.webp",
       alt:"Foton Transvan, front three-quarter view",
       desc:"A mid-size van split between a cargo build for delivery operators and a passenger build for staff transport, both on the same high-roof body.",
       specs:[["Engine","2.8L Turbodiesel"],["Body Options","Cargo, Passenger, Ambulance"],["Transmission","5-Speed M/T"],["Roof","High-roof (HR)"],["Drive","4x2"],["Cargo Volume","~6.5 m³, cargo build"]]
+    },
+    {
+      /* Added from foton.com.ph's Harabas TM300 line — a separate current
+         series from "Gratour," despite our old Gratour photo's filename
+         ("Gratour-TM-300...") suggesting they were once the same product. */
+      id:"harabas300", unit:"UNIT 006", name:"Harabas TM300", cat:"Light MPV · MPV / Wingvan / F-Van / Dropside", group:"Light MPVs",
+      price:"Ask for a quote", img:"images/harabas300.webp",
+      alt:"Foton Harabas TM300 MPV, front three-quarter view",
+      desc:"A compact MPV platform also sold as a wingvan, F-van and dropside — the entry point for buyers who need seats and cargo capacity from the same small-footprint chassis.",
+      specs:[["Engine","2.156L Diesel, Euro IV"],["Output","87 hp / 3,200 rpm"],["Seating","16 (2 front + 14 rear), MPV body"],["Body Options","MPV, Wingvan, F-Van, Dropside"],["GVW","2,690 kg"],["Rated Payload","1,130 kg"]]
+    },
+    {
+      id:"harabasmiler", unit:"UNIT 007", name:"Harabas Miler", cat:"Light Truck · MPV / F-Van / Dropside", group:"Light Trucks",
+      price:"Ask for a quote", img:"images/harabasmiler.webp",
+      alt:"Foton Harabas Miler light truck, front three-quarter view",
+      desc:"A step up from the TM300 in payload and power — a turbocharged light truck platform for routes that outgrow a compact MPV but don't need Tornado's full size.",
+      specs:[["Engine","2.5L Turbodiesel CRDI"],["Output","129 hp / 3,000 rpm"],["Transmission","5-Speed M/T"],["Body Options","MPV, F-Van, Dropside"],["GVW","4,495 kg"],["Rated Payload","1,900 kg"]]
+    },
+    {
+      id:"tunlandv7", unit:"UNIT 008", name:"Tunland V7", cat:"Premium Pickup · 4x2, 5-Seater", group:"Pickups",
+      price:"Ask for a quote", img:"images/tunland.webp",
+      alt:"Foton Tunland V7 pickup truck, front three-quarter view",
+      desc:"The lineup's flagship pickup, above Thunder — a turbo-diesel hybrid drivetrain with an 8-speed automatic, for buyers who want a premium daily driver that still works.",
+      specs:[["Engine","2.0L Turbodiesel Hybrid"],["Output","161 hp / 3,600 rpm"],["Torque","450 N·m / 1,500–2,600 rpm"],["Transmission","ZF 8-Speed A/T"],["Drive","4x2"],["Seating","5"]]
+    },
+    {
+      id:"tunlandv9", unit:"UNIT 009", name:"Tunland V9", cat:"Premium Pickup · 4x4, 5-Seater", group:"Pickups",
+      price:"Ask for a quote", img:"images/tunlandv9.webp",
+      alt:"Foton Tunland V9 pickup truck, front three-quarter view",
+      desc:"V7's 4x4 sibling — same engine and output, with an independent rear suspension, electronic power steering and six airbags for buyers who need the extra traction.",
+      specs:[["Engine","2.0L Turbodiesel Hybrid"],["Output","161 hp / 3,600 rpm"],["Torque","450 N·m / 1,500–2,600 rpm"],["Transmission","ZF 8-Speed A/T"],["Drive","4x4"],["Safety","6 airbags, ESP, EPS steering"]]
+    },
+    {
+      id:"toano", unit:"UNIT 010", name:"Toano", cat:"Passenger Van · 15-Seater", group:"Passenger Vans",
+      price:"Ask for a quote", img:"images/toano.webp",
+      alt:"Foton Toano passenger van, front three-quarter view",
+      desc:"A high-roof 15-seater built on the same Cummins platform as Traveller, with an electronic step board and extra reverse sensors for tighter city stops.",
+      specs:[["Engine","2.8L Cummins ISF"],["Emission Standard","Euro 4"],["Seating","15"],["Roof","High-roof clearance"],["Features","Electronic step board, 4-probe reverse sensor"],["Use Case","City shuttle / staff transport"]]
+    },
+    {
+      id:"hurricanedump", unit:"UNIT 011", name:"Hurricane EST-M", cat:"Medium Duty Truck · Dump Truck, 9 CBM", group:"Medium Duty Trucks",
+      price:"Ask for a quote", img:"images/hurricane_dump.png",
+      alt:"Foton Hurricane EST-M dump truck, front three-quarter view",
+      desc:"A dump truck built for gravel, sand and demolition debris — a 9 CBM box on a 220 hp chassis, for construction and quarry work around San Pablo and the towns nearby.",
+      specs:[["Engine","ISB-220-40, In-line 6-Cyl Turbodiesel"],["Output","220 hp / 2,500 rpm"],["Payload","13,060 kg"],["Cargo Volume","9 CBM dump box"],["Drive","4x2"],["Tires","6+1 / 11R22.5"]]
+    },
+    {
+      id:"estmfvan", unit:"UNIT 012", name:"EST-M", cat:"Heavy Duty Truck · 6x2, F-Van 32ft", group:"Heavy Duty Trucks",
+      price:"Ask for a quote", img:"images/estm_fvan.png",
+      alt:"Foton EST-M 6x2 F-Van heavy duty truck, front three-quarter view",
+      desc:"The lighter of the heavy-duty haulers — a 270 hp Cummins engine and a 32ft flat bed, for operators who need real cargo volume without stepping up to a 6x4.",
+      specs:[["Engine","ISDe-270 Cummins, In-line 6-Cyl Turbodiesel"],["Output","270 hp / 2,500 rpm"],["Payload","25,000 kg"],["Body Options","32ft flatbed, side & back door"],["Drive","6x2"],["Tires","10+1 / 11.00-R22.5"]]
+    },
+    {
+      id:"etxnfvan", unit:"UNIT 013", name:"ETX-N", cat:"Heavy Duty Truck · 6x4, F-Van 32ft", group:"Heavy Duty Trucks",
+      price:"Ask for a quote", img:"images/etxn_fvan.png",
+      alt:"Foton ETX-N 6x4 F-Van heavy duty truck, front three-quarter view",
+      desc:"The workhorse of the heavy lineup — 350 hp, a 44-ton payload rating and a 32ft flat bed, for freight and logistics operators moving serious volume.",
+      specs:[["Engine","ISGE4-350, In-line 6-Cyl Turbodiesel"],["Output","350 hp / 1,900 rpm"],["Payload","44,000 kg"],["Body Options","32ft flatbed, side & back door"],["Drive","6x4"],["Tires","10+1 / 12.00-R22.5"]]
+    },
+    {
+      id:"est430tractor", unit:"UNIT 014", name:"EST430", cat:"Heavy Duty Truck · 6x4 Tractor Head", group:"Heavy Duty Trucks",
+      price:"Ask for a quote", img:"images/est430_tractor.png",
+      alt:"Foton EST430 6x4 tractor head, front three-quarter view",
+      desc:"The flagship: a 430 hp prime mover rated to pull 80 tons, for hauling container vans and trailers on long-haul routes.",
+      specs:[["Engine","ISGe4-430, In-line 6-Cyl Turbodiesel"],["Output","430 hp / 1,900 rpm"],["Pulling Capacity","80,000 kg"],["Drive","6x4"],["Tires","10+1 / 315/80R22.5"],["Use Case","Long-haul tractor head"]]
     }
   ];
 
@@ -968,7 +1170,7 @@
     "Roof":"layers",
     /* lot-level facts, shown in place of engine specs when no single unit is featured */
     "Model Lines":"layers", "Service Bays":"box", "Warranty":"gauge",
-    "Entry Price":"bolt", "Financing":"scale"
+    "Get a Quote":"bolt", "Financing":"scale"
   };
   function icon(key){
     var d = ICONS[ICON_FOR[key] || "layers"];
@@ -1034,9 +1236,9 @@
     {id:"gratour",   depth:2}
   ];
   var LOT_FACTS = [
-    ["Model Lines","Five, all stocked here"],
+    ["Model Lines","Fourteen, all stocked here"],
     ["Service Bays","Four, on this lot"],
-    ["Entry Price","From ₱570,000"],
+    ["Get a Quote","Free, on Viber"],
     ["Financing","Approved on-site"]
   ];
   function byId(id){
@@ -1044,7 +1246,16 @@
     return null;
   }
 
-  var groups = ["All Units"].concat(vehicles.map(function(v){return v.group;}));
+  /* A latent bug the original 5 vehicles never exposed: each of them had a
+     UNIQUE group, so a plain map() never produced a duplicate. Tunland
+     shares "Pickups" with Thunder and Harabas Miler shares "Light Trucks"
+     with Tornado — first real case of two vehicles in one group, and it
+     surfaced this immediately as two identical filter pills. */
+  var groups = ["All Units"].concat(
+    vehicles.map(function(v){return v.group;}).filter(function(g, i, arr){
+      return arr.indexOf(g) === i;
+    })
+  );
   var railEl = $('heroRail'), lineupEl = $('homeLineup');
   var heroImg = $('heroImg'), heroWord = $('heroWordmark'), heroMeta = $('heroUnitMeta'), heroStrip = $('heroSpecStrip');
   var heroFleet = $('heroFleet'), heroStage = document.querySelector('.hero-stage');
@@ -1064,7 +1275,7 @@
     heroImg.hidden = true;
     heroFleet.hidden = false;
     heroWord.textContent = 'Lineup';
-    heroMeta.textContent = 'UNITS 001–005 · FULL LINEUP · 2026';
+    heroMeta.textContent = 'UNITS 001–014 · FULL LINEUP · 2026';
     heroStrip.innerHTML = LOT_FACTS.map(specTileHTML).join('');
 
     if(hasGsap && !reduced){
@@ -1174,7 +1385,7 @@
 
   /* ---------- routing ---------- */
   var routes = ['home','models','financing','service','about','contact'];
-  var SITE = 'Foton Philippines San Pablo';
+  var SITE = 'Jonathan Ruelo – Foton San Pablo';
   var ROUTE_TITLES = {
     home:SITE,
     models:'Models — '+SITE,
@@ -1274,7 +1485,7 @@
 
   function checkPhone(){
     var input = $('phone'), v = input.value.trim();
-    if(!v) return setErr(input, 'Enter a number sales can reach you on.');
+    if(!v) return setErr(input, 'Enter a number I can reach you on.');
     var digits = v.replace(/\D/g,'');
     if(digits.length < 10 || digits.length > 13){
       return setErr(input, 'That is not a complete mobile number. Use the 09XX XXX XXXX format.');
@@ -1302,7 +1513,7 @@
       return;
     }
     formStatus.textContent = 'Thanks, ' + $('name').value.trim().split(' ')[0] +
-      '. This is a demo build, so nothing was sent — a live site would route this to the sales desk.';
+      '. This is a demo build, so nothing was sent — a live site would message this straight to me on Viber.';
     formStatus.hidden = false;
     form.reset();
   });
