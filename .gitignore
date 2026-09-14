@@ -1,4 +1,14 @@
+# Agent/tooling scratch — these carry vendored skill packages including a
+# ~15 MB Windows binary each. Committing them would bloat the repo permanently.
 .claude/
+.codex/
+.agents/
+skills-lock.json
+
+# Scratch files from local image/preview tooling
+_*.html
+_*.js
+
 node_modules/
 .DS_Store
 Thumbs.db

@@ -2,7 +2,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@500;700;800;900&family=Outfit:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- Axes trimmed to what is actually set: Bodoni 500-italic (the motto), 700 and
+     800; Outfit 300-600 plus the 600 italic the hero emphasis needs. The page
+     was previously pulling Bodoni 500/900 and Outfit 700 that nothing used,
+     while faux-slanting both italics. -->
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,700;0,800;1,500&family=Outfit:ital,wght@0,300;0,400;0,500;0,600;1,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   /* ------------------------------------------------------------------
      Foton San Pablo — committed single-theme light showroom.
@@ -19,12 +23,35 @@
     --surface:#ffffff;
     --surface-2:#f2f0ea;
     --steel-band:#dedbd1;    /* tinted section, same light family */
+    /* The image plate is deliberately darker than every other surface. Four of
+       the five units are white or silver; on the old near-white plate their
+       roofs and flanks had no edge at all and the vehicle dissolved into the
+       card. This is the separation, and it is why the plate does not match
+       --surface-2 the way the rest of the page does. */
+    --plate-hi:#dcd7cb;
+    --plate-lo:#c9c3b5;
     --ink:#191d22;
     --ink-2:#3d454e;
-    --ink-3:#6d757e;
+    /* Secondary text. Darkened from #6d757e, which read 3.5:1 on the hero
+       gradient's bottom stop — this layer carries every tagline, spec value
+       and table header, so it has to clear AA on the darkest ground it lands
+       on, not just on white. */
+    --ink-3:#575f69;
+    --ink-4:#6b7480;         /* muted: placeholders only, 4.7:1 on white */
     --line:rgba(25,29,34,0.12);
     --line-soft:rgba(25,29,34,0.07);
+    /* Two accent roles, one hue. The brand orange stays exactly as it was for
+       fills, borders, focus and selection, where 3:1 is the bar; text gets a
+       darkened cut because #b4622a reads 4.4:1 on white and 3.2:1 on the
+       tinted band — the worst contrast on the site. */
     --accent:#b4622a;        /* burnt orange — one accent, locked */
+    --accent-text:#8f4c1f;   /* same hue, AA on every light ground */
+    /* Text on the ink surfaces. Explicit values rather than white-alpha, so
+       contrast stops depending on whatever sits behind the footer. Tinted
+       from the ink hue, not neutral gray. */
+    --on-ink:#ffffff;
+    --on-ink-2:#959ea9;      /* 6.2:1 on --ink */
+    --on-ink-3:#7f8894;      /* 4.7:1 on --ink, for the legal line */
     --steel:#4a6076;         /* cool counterpoint, data values only */
     --shadow-soft:0 18px 40px rgba(25,29,34,0.10);
     --ease:cubic-bezier(0.32,0.72,0,1);
@@ -45,6 +72,9 @@
     font-size:16px;
     line-height:1.6;
     -webkit-font-smoothing:antialiased;
+    /* A pasted unit name or a long word in a message field should wrap, not
+       push a card open and reopen the sideways-scroll problem. */
+    overflow-wrap:break-word;
   }
   img{display:block;max-width:100%;}
   a{color:inherit;}
@@ -53,6 +83,27 @@
   .mark{font-family:"Bodoni Moda",Georgia,serif;}
   .wrap{max-width:var(--shell);margin:0 auto;padding:0 var(--gutter);}
   [hidden]{display:none!important;}
+  .sr-only{
+    position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+    overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;
+  }
+  /* Route changes move focus to the new heading so screen readers land in the
+     right place; that focus is programmatic, so it must not draw a ring. */
+  h1[tabindex="-1"]:focus{outline:none;}
+  .skip-link{
+    position:absolute;left:var(--gutter);top:0;z-index:100;
+    transform:translateY(-120%);
+    background:var(--ink);color:#fff;text-decoration:none;
+    padding:0.7rem 1.2rem;border-radius:0 0 6px 6px;font-size:0.9rem;
+    transition:transform .3s var(--ease);
+  }
+  .skip-link:focus{transform:translateY(0);}
+  /* Grid and flex children carry min-width:auto, so a child that is wider than
+     the track holds the track open instead of shrinking — the 460px spec
+     tables did exactly that and dragged the whole document past the viewport
+     on a phone. Let the tracks collapse; .table-wrap still scrolls on its own. */
+  .split > *, .models-grid > *, .model-card > *, .about > *, .contact > *,
+  .reasons > *, .bays > *, .card-grid > *, .foot-grid > *, .steps li > *{min-width:0;}
   ::selection{background:var(--accent);color:#fff;}
 
   /* ---------------- header ---------------- */
@@ -64,7 +115,13 @@
     border-bottom:1px solid var(--line-soft);
   }
   .nav-row{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;height:68px;}
-  .brand{display:flex;flex-direction:column;line-height:1;text-decoration:none;cursor:pointer;}
+  /* Emblem beside the wordmark, not instead of it: the logo lockup already
+     spells out FOTON SAN PABLO, so dropping the whole thing in here would set
+     the dealership name twice in two different faces. The mark carries the
+     brand, the Bodoni type carries the page. */
+  .brand{display:flex;align-items:center;gap:0.7rem;text-decoration:none;cursor:pointer;}
+  .brand-mark{width:34px;height:34px;flex:0 0 auto;}
+  .brand-type{display:flex;flex-direction:column;line-height:1;}
   .brand .b1{font-family:"Bodoni Moda",Georgia,serif;font-weight:800;font-size:1.35rem;letter-spacing:0.06em;text-transform:uppercase;}
   .brand .b2{font-family:"IBM Plex Mono",monospace;font-size:0.58rem;letter-spacing:0.2em;color:var(--ink-3);margin-top:0.3rem;text-transform:uppercase;}
   nav.links{display:flex;gap:clamp(0.9rem,2vw,1.9rem);font-size:0.9rem;font-weight:400;}
@@ -123,7 +180,13 @@
     max-width:var(--shell-hero);margin:0 auto;padding:0 var(--gutter);
   }
   .hero-top .name{font-family:"Bodoni Moda",Georgia,serif;font-weight:700;font-size:clamp(0.95rem,2.2vw,1.25rem);letter-spacing:0.12em;text-transform:uppercase;}
-  .hero-top .tagline{font-size:clamp(0.82rem,1.6vw,0.95rem);color:var(--ink-3);margin-top:0.25rem;font-weight:300;}
+  /* Italic Bodoni, not the body sans: it is the dealership speaking, and the
+     serif marks it as a motto rather than another product claim sitting
+     above a hero that talks about payload and highway runs. */
+  .hero-top .tagline{
+    font-family:"Bodoni Moda",Georgia,serif;font-style:italic;
+    font-size:clamp(0.9rem,1.8vw,1.1rem);color:var(--ink-2);margin-top:0.3rem;font-weight:500;
+  }
   .hero-top .unit-meta{font-family:"IBM Plex Mono",monospace;font-size:clamp(0.62rem,1.3vw,0.75rem);letter-spacing:0.1em;color:var(--ink-3);text-align:right;padding-top:0.35rem;}
 
   .hero-stage{
@@ -137,15 +200,44 @@
     position:absolute;left:var(--gutter);top:50%;transform:translateY(-50%);
     display:flex;flex-direction:column;gap:0.5rem;z-index:3;
   }
-  .rail-pill{
-    font-family:"Outfit",sans-serif;font-size:0.82rem;font-weight:400;
-    padding:0.5rem 1.1rem;border-radius:999px;
-    background:rgba(255,255,255,0.66);color:var(--ink-2);
-    border:1px solid var(--line-soft);
-    cursor:pointer;text-align:left;white-space:nowrap;
-    transition:background .45s var(--ease), color .45s var(--ease), transform .45s var(--ease), border-color .45s var(--ease);
+  /* ...but that only holds while a single unit sits centred with empty space
+     beside it. With the whole lot on screen the composition fills the width and
+     the rail lands on top of the outermost vehicle, so in fleet mode it returns
+     to the flow as a centred bar above the group. Scoped to wide screens; below
+     1080 the rail is already horizontal for its own reasons. */
+  @media (min-width:1081px){
+    .hero-stage.is-fleet .hero-rail{
+      position:static;transform:none;
+      flex-direction:row;flex-wrap:wrap;justify-content:center;
+      gap:0.5rem;margin-bottom:clamp(0.6rem,1.4vw,1.1rem);
+    }
   }
-  .rail-pill.active{background:var(--ink);color:#fff;border-color:var(--ink);}
+  /* The rail floats over the vehicle, so at 0.66 white on a white van the pill
+     had no edge and the control disappeared into the photograph. Frosted glass
+     is the fix, and the separation has to come from a DARK hairline plus a cast
+     shadow — a white border is invisible against exactly the backdrop that
+     caused the problem. The inset highlight is what sells it as glass. */
+  .rail-pill{
+    font-family:"Outfit",sans-serif;font-size:0.82rem;font-weight:450;
+    padding:0.5rem 1.1rem;border-radius:999px;
+    background:rgba(255,255,255,0.62);color:var(--ink);
+    backdrop-filter:blur(14px) saturate(1.6);
+    -webkit-backdrop-filter:blur(14px) saturate(1.6);
+    border:1px solid rgba(25,29,34,0.13);
+    box-shadow:0 3px 12px rgba(25,29,34,0.13), inset 0 1px 0 rgba(255,255,255,0.75);
+    cursor:pointer;text-align:left;white-space:nowrap;
+    transition:background .45s var(--ease), color .45s var(--ease), transform .45s var(--ease),
+               border-color .45s var(--ease), box-shadow .45s var(--ease);
+  }
+  /* Safari on older iOS and Firefox without the flag get no blur at all, which
+     would leave translucent-white-on-white — the original bug. Go opaque. */
+  @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+    .rail-pill{background:rgba(255,255,255,0.94);}
+  }
+  .rail-pill.active{
+    background:var(--ink);color:#fff;border-color:var(--ink);
+    box-shadow:0 4px 16px rgba(25,29,34,0.28), inset 0 1px 0 rgba(255,255,255,0.12);
+  }
 
   /* wordmark and unit share one centre by construction */
   .hero-center{
@@ -173,6 +265,52 @@
     filter:drop-shadow(0 26px 30px rgba(25,29,34,0.20));
   }
 
+  /* ---------------- fleet composition (All Units) ----------------
+     Bottom-aligned so every cutout sits on one ground line regardless of how
+     tall the body is, and depth is carried by three things at once: width,
+     how far the unit is lifted off the baseline, and atmospheric haze on the
+     ones further back. Opacity is deliberately NOT used for depth — GSAP owns
+     opacity for the entrance, and the two would fight. */
+  .fleet{
+    position:relative;z-index:2;
+    display:flex;align-items:flex-end;justify-content:center;
+    width:100%;
+    /* Without a cap the group keeps spreading on a 2560px monitor until the
+       units are marooned at the screen edges with a hole in the middle. */
+    max-width:1500px;margin-inline:auto;
+  }
+  .fleet-unit{
+    background:none;border:0;padding:0;margin:0;line-height:0;
+    flex:0 0 auto;cursor:pointer;position:relative;
+    transition:transform .55s var(--ease);
+  }
+  /* "auto 2 / 1" reserves a 2:1 box until the file reports its real ratio,
+     then defers to it. Without this the row has zero height until the images
+     land and everything below the hero jumps down as they arrive. */
+  .fleet-unit img{width:100%;height:auto;display:block;aspect-ratio:auto 2 / 1;}
+  .fleet-unit.d0{width:34%;z-index:5;}
+  .fleet-unit.d1{width:25%;z-index:3;margin-inline:-3.5%;margin-bottom:3%;}
+  .fleet-unit.d2{width:19%;z-index:1;margin-inline:-3%;margin-bottom:7%;}
+  .fleet-unit.d0 img{filter:drop-shadow(0 22px 26px rgba(25,29,34,0.24));}
+  .fleet-unit.d1 img{filter:drop-shadow(0 16px 20px rgba(25,29,34,0.18)) saturate(0.92) brightness(1.03);}
+  .fleet-unit.d2 img{filter:drop-shadow(0 12px 16px rgba(25,29,34,0.14)) saturate(0.84) brightness(1.06);}
+  .fleet-unit:focus-visible{outline-offset:6px;}
+
+  /* Five across needs about 1000px before the units at the back fall under
+     ~175px and stop being identifiable as vehicles. Below that the two at the
+     back drop out and the remaining three take the width they gave up. This
+     lands iPad portrait (768) on three, which is what it wants; iPad landscape
+     (1024) still gets the full lot. */
+  @media (max-width:999px){
+    .fleet-unit.d2{display:none;}
+    .fleet-unit.d0{width:44%;}
+    .fleet-unit.d1{width:31%;margin-inline:-3.5%;}
+  }
+  @media (max-width:430px){
+    .fleet-unit.d0{width:54%;}
+    .fleet-unit.d1{width:34%;margin-inline:-5%;margin-bottom:4%;}
+  }
+
   .hero-caption{
     max-width:var(--shell-hero);margin:0 auto;
     padding:clamp(0.3rem,1vw,0.7rem) var(--gutter) 0;
@@ -185,6 +323,9 @@
   .spec-strip{
     max-width:var(--shell-hero);margin:clamp(0.9rem,2vw,1.4rem) auto 0;
     padding:0 var(--gutter);
+    /* Four tiles, not five: five never divides evenly, and at 768 it stranded
+       the last one alone on a second row. Four gives one row on tablet and up,
+       and a clean 2x2 on phones. */
     display:grid;grid-template-columns:repeat(auto-fit,minmax(142px,1fr));gap:0.8rem;
   }
   .spec-tile{
@@ -220,11 +361,17 @@
     .hero-caption h1{max-width:24ch;}
     .cta-row{width:100%;}
     .cta-row .btn{flex:1 1 auto;justify-content:center;}
+    /* Two columns cannot divide five tiles evenly, so the last one takes the
+       full row instead of sitting as a stray half-width orphan. */
+    .spec-strip{grid-template-columns:repeat(2,1fr);}
+    .spec-strip .spec-tile:last-child:nth-child(odd){grid-column:1 / -1;}
   }
   @media (max-width:520px){
     .hero-top{flex-direction:column;gap:0.4rem;}
     .hero-top .unit-meta{text-align:left;padding-top:0;}
-    .wordmark{top:calc(28% - 0.4em);}
+    /* 17vw fits THUNDER but slices letters off TRAVELLER and TRANSVAN, so the
+       backdrop looks broken on whichever unit the rail lands on. */
+    .wordmark{top:calc(28% - 0.4em);font-size:clamp(2.4rem,13.5vw,4.4rem);}
     .hero-unit{width:min(88%,420px);}
   }
 
@@ -232,6 +379,7 @@
      can actually hover, and bigger targets wherever the pointer is coarse. */
   @media (hover:hover) and (pointer:fine){
     .rail-pill:hover{transform:translateX(4px);border-color:var(--line);}
+    .fleet-unit:hover{transform:translateY(-8px);}
   }
   @media (pointer:coarse){
     .rail-pill{min-height:44px;display:inline-flex;align-items:center;padding:0.6rem 1.15rem;}
@@ -247,7 +395,7 @@
   .section-head p{color:var(--ink-3);font-weight:300;max-width:46ch;margin:0.5rem 0 0;}
   .eyebrow{
     font-family:"IBM Plex Mono",monospace;font-size:0.68rem;letter-spacing:0.18em;
-    text-transform:uppercase;color:var(--accent);display:block;margin-bottom:0.7rem;
+    text-transform:uppercase;color:var(--accent-text);display:block;margin-bottom:0.7rem;
   }
 
   /* ---------------- lineup cards ---------------- */
@@ -262,7 +410,7 @@
   .v-card:hover{box-shadow:var(--shadow-soft);border-color:var(--line);}
   .v-card .shot{
     aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;padding:1.1rem;
-    background:linear-gradient(170deg,#fbfaf7 0%,var(--surface-2) 100%);
+    background:linear-gradient(170deg,var(--plate-hi) 0%,var(--plate-lo) 100%);
     border-radius:6px 6px 0 0;overflow:hidden;
   }
   .v-card .shot img{max-height:100%;object-fit:contain;transform:translateZ(34px);}
@@ -289,7 +437,7 @@
   .band{background:var(--steel-band);padding:clamp(3rem,6vw,5rem) 0;}
   .reasons{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:2rem;margin-top:2rem;}
   .reason{border-top:1px solid rgba(25,29,34,0.18);padding-top:1rem;}
-  .reason .n{font-family:"IBM Plex Mono",monospace;font-size:0.72rem;color:var(--accent);letter-spacing:0.1em;}
+  .reason .n{font-family:"IBM Plex Mono",monospace;font-size:0.72rem;color:var(--accent-text);letter-spacing:0.1em;}
   .reason h3{font-size:1.2rem;margin-top:0.55rem;font-weight:500;}
   .reason p{color:var(--ink-2);font-size:0.92rem;margin:0.45rem 0 0;font-weight:300;max-width:34ch;}
 
@@ -317,7 +465,7 @@
   .model-card.featured .m-shot{flex:1 1 46%;}
   .model-card.featured .m-body{flex:1 1 54%;}
   .m-shot{
-    background:linear-gradient(170deg,#fbfaf7,var(--surface-2));
+    background:linear-gradient(170deg,var(--plate-hi),var(--plate-lo));
     border-radius:6px;display:flex;align-items:center;justify-content:center;
     padding:1.4rem;aspect-ratio:16/10;
   }
@@ -336,12 +484,21 @@
     .models-grid{grid-template-columns:1fr;}
     .model-card.featured{flex-direction:column;align-items:stretch;gap:1rem;}
   }
+  /* Two spec columns inside a phone-width card leaves ~130px per value, which
+     wraps "6-Speed M/T or A/T" onto three ragged lines. One column reads. */
+  @media (max-width:430px){
+    .kv-grid{grid-template-columns:1fr;gap:0.55rem;}
+    .model-card{padding:1.15rem;}
+  }
 
   /* ---------------- financing ---------------- */
-  .split{display:grid;grid-template-columns:1fr 1fr;gap:3rem;padding:clamp(2.4rem,5vw,4rem) 0;}
+  /* padding-block, not the shorthand: these three layouts share their element
+     with .wrap, and "padding: X 0" was resetting .wrap's own side gutter to
+     zero — copy ran flush to the screen edge on every phone. */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:3rem;padding-block:clamp(2.4rem,5vw,4rem);}
   .steps{list-style:none;margin:1.4rem 0 0;padding:0;display:flex;flex-direction:column;gap:1.2rem;}
   .steps li{display:flex;gap:1rem;}
-  .steps .n{font-family:"IBM Plex Mono",monospace;font-size:0.78rem;color:var(--accent);padding-top:0.2rem;}
+  .steps .n{font-family:"IBM Plex Mono",monospace;font-size:0.78rem;color:var(--accent-text);padding-top:0.2rem;}
   .steps strong{font-weight:500;}
   .steps span{color:var(--ink-3);font-size:0.92rem;font-weight:300;display:block;}
   .table-wrap{overflow-x:auto;border:1px solid var(--line-soft);border-radius:6px;margin-top:1.3rem;background:var(--surface);}
@@ -358,12 +515,12 @@
   /* ---------------- service ---------------- */
   .bays{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.1rem;padding:clamp(2.4rem,5vw,3.4rem) 0 0;}
   .bay{background:var(--surface);border:1px solid var(--line-soft);border-radius:6px;padding:1.5rem;}
-  .bay .n{font-family:"IBM Plex Mono",monospace;font-size:0.68rem;color:var(--accent);letter-spacing:0.1em;}
+  .bay .n{font-family:"IBM Plex Mono",monospace;font-size:0.68rem;color:var(--accent-text);letter-spacing:0.1em;}
   .bay h3{font-size:1.15rem;margin-top:0.6rem;font-weight:500;}
   .bay p{font-size:0.9rem;color:var(--ink-3);margin:0.5rem 0 0;font-weight:300;}
 
   /* ---------------- about ---------------- */
-  .about{display:grid;grid-template-columns:1.15fr 0.85fr;gap:3.2rem;padding:clamp(2.4rem,5vw,4rem) 0;align-items:start;}
+  .about{display:grid;grid-template-columns:1.15fr 0.85fr;gap:3.2rem;padding-block:clamp(2.4rem,5vw,4rem);align-items:start;}
   .about p{margin:0 0 1.1rem;max-width:56ch;color:var(--ink-2);font-weight:300;}
   .stats{display:flex;flex-direction:column;gap:1.6rem;}
   .stat{border-top:1px solid var(--line);padding-top:0.7rem;}
@@ -372,32 +529,56 @@
   @media (max-width:860px){.about{grid-template-columns:1fr;gap:2rem;}}
 
   /* ---------------- contact ---------------- */
-  .contact{display:grid;grid-template-columns:0.9fr 1.1fr;gap:3rem;padding:clamp(2.4rem,5vw,4rem) 0;}
+  .contact{display:grid;grid-template-columns:0.9fr 1.1fr;gap:3rem;padding-block:clamp(2.4rem,5vw,4rem);}
   .info{margin-bottom:1.8rem;}
   .info h3{font-size:1rem;font-weight:500;margin-bottom:0.5rem;}
   .info p{margin:0.15rem 0;font-size:0.94rem;color:var(--ink-2);font-weight:300;}
   form{display:flex;flex-direction:column;gap:1.1rem;background:var(--surface);border:1px solid var(--line-soft);border-radius:6px;padding:1.7rem;}
   .field{display:flex;flex-direction:column;gap:0.4rem;}
   .field label{font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;font-family:"IBM Plex Mono",monospace;color:var(--ink-3);}
+  /* 1rem, not 0.95: iOS Safari force-zooms any focused input under 16px, which
+     throws the whole form layout sideways on the one device most of these
+     inquiries will come from. */
   .field input,.field select,.field textarea{
-    font:inherit;font-size:0.95rem;padding:0.7rem 0.85rem;border:1px solid var(--line);border-radius:6px;
+    font:inherit;font-size:1rem;padding:0.7rem 0.85rem;border:1px solid var(--line);border-radius:6px;
     background:#fff;color:var(--ink);
   }
-  .field input::placeholder,.field textarea::placeholder{color:#9aa1a9;}
+  .field .req{color:var(--accent-text);}
+  .field .err{
+    font-size:0.8rem;color:#9a2f21;margin:0;font-weight:400;
+    display:flex;align-items:flex-start;gap:0.4rem;
+  }
+  .field .err::before{content:"!";font-weight:600;line-height:1.5;}
+  .field [aria-invalid="true"]{border-color:#9a2f21;}
+  .form-status{
+    font-size:0.88rem;margin:0;padding:0.8rem 1rem;border-radius:6px;
+    background:var(--surface-2);border:1px solid var(--line-soft);color:var(--ink-2);
+  }
+  .field input::placeholder,.field textarea::placeholder{color:var(--ink-4);}
   form .btn{align-self:flex-start;}
   .demo-note{font-size:0.78rem;color:var(--ink-3);margin:-0.3rem 0 0;font-weight:300;}
   .map-note{margin-top:1.6rem;border:1px dashed var(--line);border-radius:6px;padding:1.3rem;font-size:0.85rem;color:var(--ink-3);font-weight:300;}
   @media (max-width:860px){.contact{grid-template-columns:1fr;gap:2rem;}}
 
   /* ---------------- footer ---------------- */
-  footer{background:var(--ink);color:rgba(255,255,255,0.62);padding:3rem 0 1.6rem;font-size:0.9rem;font-weight:300;}
+  footer{background:var(--ink);color:var(--on-ink-2);padding:3rem 0 1.6rem;font-size:0.9rem;font-weight:300;}
   .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:2.4rem;padding-bottom:2rem;border-bottom:1px solid rgba(255,255,255,0.14);}
-  .foot-grid h4{color:#fff;font-size:0.95rem;margin-bottom:0.8rem;font-weight:500;}
+  .foot-grid h4{color:var(--on-ink);font-size:0.95rem;margin-bottom:0.8rem;font-weight:500;}
+  /* Reversed lockup, not the stock one. The supplied logo is dark-on-light:
+     its black "SAN PABLO" measures about 1:1 against the ink footer and the
+     corporate blue only 2.6:1, so both failed here. The wordmark is knocked
+     out to white and the blue lifted to a tint that clears AA on this ground;
+     the chrome emblem is untouched because it already reads on dark. */
+  .foot-logo{width:200px;max-width:60%;margin-bottom:1.1rem;}
+  .foot-motto{
+    font-family:"Bodoni Moda",Georgia,serif;font-style:italic;
+    font-size:1.15rem;font-weight:500;color:var(--on-ink);margin:0 0 0.6rem;letter-spacing:0.01em;
+  }
   .foot-grid p{margin:0;}
   .foot-grid ul{list-style:none;padding:0;margin:0;display:grid;gap:0.5rem;}
   .foot-grid a{text-decoration:none;transition:color .4s var(--ease);}
-  .foot-grid a:hover{color:#fff;}
-  .foot-bottom{display:flex;justify-content:space-between;padding-top:1.3rem;flex-wrap:wrap;gap:0.6rem;font-size:0.76rem;color:rgba(255,255,255,0.45);}
+  .foot-grid a:hover{color:var(--on-ink);}
+  .foot-bottom{display:flex;justify-content:space-between;padding-top:1.3rem;flex-wrap:wrap;gap:0.6rem;font-size:0.76rem;color:var(--on-ink-3);}
   @media (max-width:760px){.foot-grid{grid-template-columns:1fr;gap:1.6rem;}}
 
   @media (prefers-reduced-motion: reduce){
@@ -406,14 +587,19 @@
   }
 </style>
 
+<a class="skip-link" href="#main">Skip to content</a>
+
 <header>
   <div class="wrap nav-row">
     <a class="brand" data-link data-route="home" href="#/">
-      <span class="b1">Foton</span>
-      <span class="b2">San Pablo</span>
+      <img class="brand-mark" src="images/logo-mark.webp" alt="" width="34" height="34">
+      <span class="brand-type">
+        <span class="b1">Foton</span>
+        <span class="b2">San Pablo</span>
+      </span>
     </a>
-    <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false">Menu</button>
-    <nav class="links" id="navLinks">
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navLinks">Menu</button>
+    <nav class="links" id="navLinks" aria-label="Main">
       <button data-link data-route="home">Home</button>
       <button data-link data-route="models">Models</button>
       <button data-link data-route="financing">Financing</button>
@@ -425,23 +611,24 @@
   </div>
 </header>
 
-<main>
+<main id="main" tabindex="-1">
 <!-- ============ HOME ============ -->
 <section data-page="home">
   <div class="hero">
     <div class="hero-top">
       <div>
         <div class="name">Foton San Pablo</div>
-        <div class="tagline">Uptime without compromise</div>
+        <div class="tagline">We sell Dreams</div>
       </div>
       <div class="unit-meta" id="heroUnitMeta">UNIT 001 · THUNDER · 2026</div>
     </div>
 
     <div class="hero-stage">
-      <div class="hero-rail" id="heroRail"></div>
+      <div class="hero-rail" id="heroRail" role="group" aria-label="Filter the featured unit by category"></div>
       <div class="hero-center">
-        <div class="wordmark" id="heroWordmark" aria-hidden="true">Thunder</div>
-        <img class="hero-unit" id="heroImg" src="images/thunder.png" alt="Foton Thunder pickup truck, front three-quarter view">
+        <div class="wordmark" id="heroWordmark" aria-hidden="true">Lineup</div>
+        <img class="hero-unit" id="heroImg" src="images/thunder.webp" alt="Foton Thunder pickup truck, front three-quarter view" hidden>
+        <div class="fleet" id="heroFleet"></div>
       </div>
     </div>
 
@@ -548,7 +735,8 @@
       <h2 style="font-size:1.45rem;font-weight:500;">Sample computation</h2>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Unit</th><th>SRP</th><th>20% DP</th><th>Monthly*</th></tr></thead>
+          <caption class="sr-only">Sample financing computation by unit: SRP, 20% down payment, and indicative monthly amortisation over 60 months.</caption>
+          <thead><tr><th scope="col">Unit</th><th scope="col">SRP</th><th scope="col">20% DP</th><th scope="col">Monthly*</th></tr></thead>
           <tbody>
             <tr><td>Gratour Dropside</td><td class="mono">₱570,000</td><td class="mono">₱114,000</td><td class="mono">₱9,800 · 60 mo</td></tr>
             <tr><td>Thunder 4x2 A/T</td><td class="mono">₱1,290,000</td><td class="mono">₱258,000</td><td class="mono">₱21,600 · 60 mo</td></tr>
@@ -580,7 +768,8 @@
       <h2 style="font-size:1.45rem;margin-bottom:0.4rem;font-weight:500;">Standard PMS schedule</h2>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Interval</th><th>Work done</th><th>Duration</th></tr></thead>
+          <caption class="sr-only">Standard preventive maintenance schedule: service interval, work performed, and expected duration.</caption>
+          <thead><tr><th scope="col">Interval</th><th scope="col">Work done</th><th scope="col">Duration</th></tr></thead>
           <tbody>
             <tr><td class="mono">1,000 km</td><td>First service, oil change and general inspection</td><td class="mono">1 hr</td></tr>
             <tr><td class="mono">5,000 km</td><td>Oil, oil filter, tire rotation</td><td class="mono">1.5 hrs</td></tr>
@@ -644,14 +833,18 @@
       </div>
       <div class="map-note">Map embed left out of this demo. A live build would drop a pin on the National Highway location here.</div>
     </div>
-    <form id="inquiryForm">
+    <form id="inquiryForm" novalidate>
       <div class="field">
-        <label for="name">Full name</label>
-        <input id="name" type="text" placeholder="Juan dela Cruz" required>
+        <label for="name">Full name <span class="req" aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
+        <input id="name" name="name" type="text" placeholder="Juan dela Cruz" maxlength="80"
+               autocomplete="name" required aria-describedby="name-err">
+        <p class="err" id="name-err" hidden></p>
       </div>
       <div class="field">
-        <label for="phone">Mobile number</label>
-        <input id="phone" type="tel" placeholder="09XX XXX XXXX" required>
+        <label for="phone">Mobile number <span class="req" aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
+        <input id="phone" name="phone" type="tel" placeholder="09XX XXX XXXX" inputmode="tel"
+               maxlength="20" autocomplete="tel" required aria-describedby="phone-err">
+        <p class="err" id="phone-err" hidden></p>
       </div>
       <div class="field">
         <label for="unit">Unit you're asking about</label>
@@ -666,9 +859,11 @@
       </div>
       <div class="field">
         <label for="msg">Message</label>
-        <textarea id="msg" rows="4" placeholder="How you plan to use the unit, and your target timeline."></textarea>
+        <textarea id="msg" name="msg" rows="4" maxlength="1000"
+                  placeholder="How you plan to use the unit, and your target timeline."></textarea>
       </div>
       <button class="btn" type="submit">Send Inquiry <span class="pip">&rarr;</span></button>
+      <p class="form-status" id="formStatus" role="status" hidden></p>
       <p class="demo-note">Demo only. This form does not send data anywhere.</p>
     </form>
   </div>
@@ -679,7 +874,9 @@
   <div class="wrap">
     <div class="foot-grid">
       <div>
-        <h4>Foton Philippines San Pablo</h4>
+        <img class="foot-logo" src="images/logo-reversed.webp"
+             alt="Foton San Pablo" width="200" height="145" loading="lazy">
+        <p class="foot-motto">We sell Dreams.</p>
         <p>An independent Foton dealership on the National Highway, San Pablo City, Laguna. Sales, financing and service under one roof.</p>
       </div>
       <div>
@@ -718,35 +915,35 @@
   var vehicles = [
     {
       id:"thunder", unit:"UNIT 001", name:"Thunder", cat:"Pickup · 4x2 / 4x4", group:"Pickups",
-      price:"From ₱1,080,000", img:"images/thunder.png",
+      price:"From ₱1,080,000", img:"images/thunder.webp",
       alt:"Foton Thunder pickup truck, front three-quarter view",
       desc:"The volume seller on this lot. A double-cab pickup for daily loading and provincial highway runs, in manual or automatic, 4x2 or 4x4.",
       specs:[["Engine","2.0L Turbodiesel"],["Output","Up to 163 hp"],["Drive","4x2 / 4x4"],["Transmission","6-Speed M/T or A/T"],["Bed Payload","~1,000 kg"],["Seating","5"]]
     },
     {
       id:"tornado", unit:"UNIT 002", name:"Tornado", cat:"Light Truck · MPV / Dropside / F-Van", group:"Light Trucks",
-      price:"From ₱950,000", img:"images/tornado.png",
+      price:"From ₱950,000", img:"images/tornado.webp",
       alt:"Foton Tornado light truck, front three-quarter view",
       desc:"A cab-and-chassis platform sold in MPV, dropside, F-van and dump bodies. The usual pick for cooperatives running a shuttle or a delivery route.",
       specs:[["Engine","3.7L or 4.2L Diesel"],["GVW Class","M2.6C – M6.1C"],["Transmission","5-Speed M/T"],["Body Options","MPV, Dropside, F-Van, Dump"],["Seating","Up to 25, MPV body"],["Drive","4x2"]]
     },
     {
       id:"traveller", unit:"UNIT 003", name:"Traveller", cat:"Van · Shuttle / Tourist", group:"Passenger Vans",
-      price:"From ₱1,600,000", img:"images/traveller.png",
+      price:"From ₱1,600,000", img:"images/traveller.webp",
       alt:"Foton Traveller van, front three-quarter view",
       desc:"A high-roof passenger van for tour operators, church groups and company shuttles moving fifteen or more people in one trip.",
       specs:[["Engine","2.8L Turbodiesel"],["Seating","15–18"],["Transmission","5-Speed M/T"],["Drive","4x2"],["Configuration","XL, high-roof"],["Use Case","Tourist / shuttle"]]
     },
     {
       id:"gratour", unit:"UNIT 004", name:"Gratour", cat:"Entry Pickup / Van", group:"Entry Pickups",
-      price:"From ₱570,000", img:"images/gratour.png",
+      price:"From ₱570,000", img:"images/gratour.webp",
       alt:"Foton Gratour mini pickup, front three-quarter view",
       desc:"The entry point. A compact pickup and van platform priced for a first commercial vehicle, or a second unit for tight city streets.",
       specs:[["Engine","1.5L Gasoline / Diesel"],["Body Options","Dropside, F-Van, MPV, Wingvan"],["Transmission","5-Speed M/T"],["Payload","~700 kg"],["Drive","4x2"],["Seating","Up to 7, MPV body"]]
     },
     {
       id:"transvan", unit:"UNIT 005", name:"Transvan", cat:"Van · Cargo / Passenger", group:"Cargo Vans",
-      price:"From ₱1,150,000", img:"images/transvan.png",
+      price:"From ₱1,150,000", img:"images/transvan.webp",
       alt:"Foton Transvan, front three-quarter view",
       desc:"A mid-size van split between a cargo build for delivery operators and a passenger build for staff transport, both on the same high-roof body.",
       specs:[["Engine","2.8L Turbodiesel"],["Body Options","Cargo, Passenger, Ambulance"],["Transmission","5-Speed M/T"],["Roof","High-roof (HR)"],["Drive","4x2"],["Cargo Volume","~6.5 m³, cargo build"]]
@@ -768,7 +965,10 @@
     "Engine":"gauge", "Output":"bolt", "GVW Class":"scale", "Drive":"wheel",
     "Transmission":"swap", "Body Options":"box", "Bed Payload":"box", "Payload":"box",
     "Cargo Volume":"box", "Seating":"seat", "Configuration":"layers", "Use Case":"layers",
-    "Roof":"layers"
+    "Roof":"layers",
+    /* lot-level facts, shown in place of engine specs when no single unit is featured */
+    "Model Lines":"layers", "Service Bays":"box", "Warranty":"gauge",
+    "Entry Price":"bolt", "Financing":"scale"
   };
   function icon(key){
     var d = ICONS[ICON_FOR[key] || "layers"];
@@ -784,11 +984,17 @@
   if(hasGsap && window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
 
   /* ---------- templates ---------- */
+  /* The card routes on click, so it has to be reachable and operable without a
+     mouse: role + tabindex make it a real link to assistive tech, and the
+     aria-label collapses the four stacked fields into one useful
+     announcement instead of reading the decorative unit number first. */
   function cardHTML(v){
-    return '<article class="v-card" data-link data-route="models">'+
+    var label = v.name+', '+v.cat+', '+v.price+'. View full specifications.';
+    return '<article class="v-card" data-link data-route="models" role="link" tabindex="0" '+
+      'aria-label="'+label.replace(/"/g,'&quot;')+'">'+
       '<div class="glare"></div>'+
       '<div class="shot"><img src="'+v.img+'" alt="'+v.alt+'" loading="lazy"></div>'+
-      '<div class="meta"><div class="unit">'+v.unit+'</div><h3>'+v.name+'</h3>'+
+      '<div class="meta"><div class="unit" aria-hidden="true">'+v.unit+'</div><h3>'+v.name+'</h3>'+
       '<div class="cat">'+v.cat+'</div><div class="price">'+v.price+'</div></div></article>';
   }
 
@@ -817,16 +1023,80 @@
   $('modelsList').innerHTML = vehicles.map(function(v,i){ return modelCardHTML(v, i===0); }).join('');
 
   /* ---------- hero: filter rail drives the featured unit ---------- */
+  /* Visual order for the group shot, not the catalogue order: the volume
+     seller sits front and centre, the two largest bodies flank it, and the
+     smallest units fall to the back where losing detail costs least. */
+  var FLEET = [
+    {id:"tornado",   depth:2},
+    {id:"transvan",  depth:1},
+    {id:"thunder",   depth:0},
+    {id:"traveller", depth:1},
+    {id:"gratour",   depth:2}
+  ];
+  var LOT_FACTS = [
+    ["Model Lines","Five, all stocked here"],
+    ["Service Bays","Four, on this lot"],
+    ["Entry Price","From ₱570,000"],
+    ["Financing","Approved on-site"]
+  ];
+  function byId(id){
+    for(var i=0;i<vehicles.length;i++){ if(vehicles[i].id === id) return vehicles[i]; }
+    return null;
+  }
+
   var groups = ["All Units"].concat(vehicles.map(function(v){return v.group;}));
   var railEl = $('heroRail'), lineupEl = $('homeLineup');
   var heroImg = $('heroImg'), heroWord = $('heroWordmark'), heroMeta = $('heroUnitMeta'), heroStrip = $('heroSpecStrip');
+  var heroFleet = $('heroFleet'), heroStage = document.querySelector('.hero-stage');
+
+  /* The whole lot in one frame, for when no single unit is selected. Each is a
+     real button: the group shot doubles as the fastest way into a unit, and
+     that has to work from the keyboard like every other control here. */
+  function renderFleet(){
+    heroFleet.innerHTML = FLEET.map(function(f){
+      var v = byId(f.id);
+      return '<button type="button" class="fleet-unit d'+f.depth+'" data-unit="'+v.id+'" '+
+        'aria-label="Feature the '+v.name+' — '+v.cat+'">'+
+        '<img src="'+v.img+'" alt="'+v.alt+'"></button>';
+    }).join('');
+
+    heroStage.classList.add('is-fleet');
+    heroImg.hidden = true;
+    heroFleet.hidden = false;
+    heroWord.textContent = 'Lineup';
+    heroMeta.textContent = 'UNITS 001–005 · FULL LINEUP · 2026';
+    heroStrip.innerHTML = LOT_FACTS.map(specTileHTML).join('');
+
+    if(hasGsap && !reduced){
+      /* Arrives outward from the middle, so the eye lands on the unit that
+         matters and the rest of the lot fills in around it. */
+      gsap.fromTo('#heroFleet .fleet-unit',
+        {y:30, opacity:0, scale:0.94},
+        {y:0, opacity:1, scale:1, duration:0.8, ease:"power3.out",
+         stagger:{each:0.085, from:"center"}, overwrite:"auto"});
+      gsap.fromTo(heroWord, {opacity:0}, {opacity:1, duration:0.7, ease:"sine.out", overwrite:"auto"});
+      gsap.fromTo('#heroSpecStrip .spec-tile', {y:14, opacity:0},
+        {y:0, opacity:1, duration:0.5, ease:"power3.out", stagger:0.06, overwrite:"auto"});
+    }
+  }
+
+  heroFleet.addEventListener('click', function(e){
+    var btn = e.target.closest('.fleet-unit');
+    if(!btn) return;
+    var v = byId(btn.getAttribute('data-unit'));
+    if(!v) return;
+    selectGroup(v.group);
+  });
 
   function renderHero(v){
+    heroStage.classList.remove('is-fleet');
+    heroImg.hidden = false;
+    heroFleet.hidden = true;
     heroImg.src = v.img;
     heroImg.alt = v.alt;
     heroWord.textContent = v.name;
     heroMeta.textContent = v.unit+' · '+v.name.toUpperCase()+' · 2026';
-    heroStrip.innerHTML = v.specs.slice(0,5).map(specTileHTML).join('');
+    heroStrip.innerHTML = v.specs.slice(0,4).map(specTileHTML).join('');
     /* overwrite:"auto" so these only clear conflicting properties — a blanket
        overwrite would kill the scroll-linked y tweens set up further down. */
     if(hasGsap && !reduced){
@@ -873,25 +1143,47 @@
   }
 
   railEl.innerHTML = groups.map(function(g,i){
-    return '<button class="rail-pill'+(i===0?' active':'')+'" data-group="'+g+'">'+g+'</button>';
+    return '<button type="button" class="rail-pill'+(i===0?' active':'')+
+      '" aria-pressed="'+(i===0?'true':'false')+'" data-group="'+g+'">'+g+'</button>';
   }).join('');
+
+  /* One entry point for changing the featured selection, because two things
+     now drive it: the filter rail and a click on a unit in the group shot. */
+  function selectGroup(g){
+    /* The selected pill is styled, so its state has to be exposed too —
+       otherwise which unit is featured is information only sighted users get. */
+    railEl.querySelectorAll('.rail-pill').forEach(function(b){
+      var on = b.getAttribute('data-group') === g;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      if(on && b.scrollIntoView) b.scrollIntoView({block:'nearest', inline:'nearest'});
+    });
+    renderLineup(g);
+    if(g === 'All Units'){ renderFleet(); return; }
+    var first = vehicles.filter(function(v){ return v.group === g; })[0];
+    if(first) renderHero(first);
+  }
 
   railEl.addEventListener('click', function(e){
     var btn = e.target.closest('.rail-pill');
     if(!btn) return;
-    railEl.querySelectorAll('.rail-pill').forEach(function(b){ b.classList.remove('active'); });
-    btn.classList.add('active');
-    var g = btn.getAttribute('data-group');
-    renderLineup(g);
-    var first = (g === 'All Units') ? vehicles[0] : vehicles.filter(function(v){ return v.group === g; })[0];
-    if(first) renderHero(first);
+    selectGroup(btn.getAttribute('data-group'));
   });
 
-  renderHero(vehicles[0]);
-  renderLineup('All Units');
+  selectGroup('All Units');
 
   /* ---------- routing ---------- */
   var routes = ['home','models','financing','service','about','contact'];
+  var SITE = 'Foton Philippines San Pablo';
+  var ROUTE_TITLES = {
+    home:SITE,
+    models:'Models — '+SITE,
+    financing:'Financing — '+SITE,
+    service:'Service — '+SITE,
+    about:'About — '+SITE,
+    contact:'Contact — '+SITE
+  };
+  var firstRoute = true;
   var sections = {};
   routes.forEach(function(r){ sections[r] = document.querySelector('[data-page="'+r+'"]'); });
   var navBtns = document.querySelectorAll('nav.links [data-route]');
@@ -899,10 +1191,33 @@
   function showRoute(route){
     if(routes.indexOf(route) === -1) route = 'home';
     routes.forEach(function(r){ sections[r].hidden = (r !== route); });
-    navBtns.forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-route') === route); });
+    navBtns.forEach(function(b){
+      var on = b.getAttribute('data-route') === route;
+      b.classList.toggle('active', on);
+      if(on) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current');
+    });
+    document.title = ROUTE_TITLES[route] || SITE;
     $('navLinks').classList.remove('open');
-    window.scrollTo(0,0);
-    if(hasGsap && !reduced && window.ScrollTrigger) ScrollTrigger.refresh();
+    $('menuToggle').setAttribute('aria-expanded','false');
+    /* html{scroll-behavior:smooth} makes a plain scrollTo(0,0) animate, so the
+       refresh below would measure at the *old* scroll position and then the
+       in-flight scroll would drag reveals back through their triggers in
+       reverse — the new page lands blank. Jump, then measure next frame. */
+    try{ window.scrollTo({top:0,left:0,behavior:'instant'}); }
+    catch(e){ window.scrollTo(0,0); }
+    if(hasGsap && !reduced && window.ScrollTrigger){
+      requestAnimationFrame(function(){ ScrollTrigger.refresh(); });
+    }
+    /* Toggling [hidden] changes the page silently: focus stays on whatever was
+       clicked and nothing is announced. Move focus to the new heading so the
+       next thing read is where the visitor actually is. Skipped on first paint,
+       where yanking focus mid-load is just disorienting. */
+    if(firstRoute){ firstRoute = false; return; }
+    var heading = sections[route].querySelector('h1');
+    if(heading){
+      heading.setAttribute('tabindex','-1');
+      heading.focus({preventScroll:true});
+    }
   }
   function routeFromHash(){
     var h = location.hash.replace('#/','').replace('#','');
@@ -916,13 +1231,80 @@
       location.hash = '/' + el.getAttribute('data-route');
     }
   });
+  /* Native buttons and anchors already activate on Enter; the cards are
+     articles, so their keyboard activation has to be wired by hand. Space is
+     accepted alongside Enter because the card reads as a large target. */
+  document.addEventListener('keydown', function(e){
+    if(e.key !== 'Enter' && e.key !== ' ' && e.key !== 'Spacebar') return;
+    var el = e.target.closest('article[data-link][data-route]');
+    if(!el) return;
+    e.preventDefault();
+    location.hash = '/' + el.getAttribute('data-route');
+  });
   $('menuToggle').addEventListener('click', function(){
     var open = $('navLinks').classList.toggle('open');
     this.setAttribute('aria-expanded', open ? 'true' : 'false');
   });
-  $('inquiryForm').addEventListener('submit', function(e){
+  /* ---------- inquiry form ----------
+     An alert() gives no field context, is unreadable to assistive tech and
+     drops on mobile behind the keyboard. Errors go inline next to the field
+     that caused them, naming both the problem and the fix. */
+  var form = $('inquiryForm'), formStatus = $('formStatus');
+
+  function setErr(input, msg){
+    var slot = $(input.id + '-err');
+    if(msg){
+      input.setAttribute('aria-invalid','true');
+      slot.textContent = msg;
+      slot.hidden = false;
+    } else {
+      input.removeAttribute('aria-invalid');
+      slot.textContent = '';
+      slot.hidden = true;
+    }
+    return !msg;
+  }
+
+  function checkName(){
+    var v = $('name').value.trim();
+    if(!v) return setErr($('name'), 'Enter the name we should put on the quotation.');
+    if(v.length < 2) return setErr($('name'), 'That looks too short — enter your full name.');
+    return setErr($('name'), '');
+  }
+
+  function checkPhone(){
+    var input = $('phone'), v = input.value.trim();
+    if(!v) return setErr(input, 'Enter a number sales can reach you on.');
+    var digits = v.replace(/\D/g,'');
+    if(digits.length < 10 || digits.length > 13){
+      return setErr(input, 'That is not a complete mobile number. Use the 09XX XXX XXXX format.');
+    }
+    return setErr(input, '');
+  }
+
+  /* Validate on submit, then re-validate that field as it is corrected —
+     nagging while someone is still typing their first character is noise. */
+  [['name', checkName], ['phone', checkPhone]].forEach(function(pair){
+    $(pair[0]).addEventListener('input', function(){
+      if(this.getAttribute('aria-invalid') === 'true') pair[1]();
+    });
+    $(pair[0]).addEventListener('blur', function(){
+      if(this.value.trim()) pair[1]();
+    });
+  });
+
+  form.addEventListener('submit', function(e){
     e.preventDefault();
-    alert('Demo form. Nothing is sent. Wire this to your CRM or an email service before going live.');
+    var okName = checkName(), okPhone = checkPhone();
+    if(!okName || !okPhone){
+      formStatus.hidden = true;
+      (okName ? $('phone') : $('name')).focus();
+      return;
+    }
+    formStatus.textContent = 'Thanks, ' + $('name').value.trim().split(' ')[0] +
+      '. This is a demo build, so nothing was sent — a live site would route this to the sales desk.';
+    formStatus.hidden = false;
+    form.reset();
   });
 
   showRoute(routeFromHash());
@@ -976,7 +1358,7 @@
       y:-70, ease:"none",
       scrollTrigger:{trigger:'.hero', start:"top top", end:"bottom top", scrub:0.5, invalidateOnRefresh:true}
     });
-    gsap.to('.hero-unit', {
+    gsap.to('.hero-unit, .fleet', {
       y:26, ease:"none",
       scrollTrigger:{trigger:'.hero', start:"top top", end:"bottom top", scrub:0.5, invalidateOnRefresh:true}
     });
