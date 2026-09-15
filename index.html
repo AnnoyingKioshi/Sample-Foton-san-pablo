@@ -411,6 +411,7 @@
     .rail-pill{min-height:44px;display:inline-flex;align-items:center;padding:0.6rem 1.15rem;}
     nav.links button{min-height:44px;}
     .btn{min-height:44px;}
+    .menu-toggle{min-height:44px;}
     .v-card .glare{display:none;}
   }
 
@@ -852,6 +853,7 @@
     </div>
   </div>
   <div class="wrap">
+    <h2 class="sr-only">Service bays</h2>
     <div class="bays">
       <div class="bay"><div class="n">BAY 01</div><h3>Preventive maintenance</h3><p>PMS at 1,000 km, 5,000 km, then every 10,000 km. Oil, filters, brake and belt inspection.</p></div>
       <div class="bay"><div class="n">BAY 02</div><h3>Warranty work</h3><p>Three years or 100,000 km, handled here rather than referred to another shop.</p></div>
@@ -925,6 +927,7 @@
   </div>
   <div class="wrap contact">
     <div>
+      <h2 class="sr-only">Contact details</h2>
       <div class="info">
         <h3>Based at Foton San Pablo</h3>
         <p>National Highway, Brgy. San Isidro</p>
@@ -951,28 +954,22 @@
       </div>
     </div>
     <form id="inquiryForm" novalidate>
+      <h2 class="sr-only">Send an inquiry</h2>
       <div class="field">
         <label for="name">Full name <span class="req" aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
         <input id="name" name="name" type="text" placeholder="Juan dela Cruz" maxlength="80"
                autocomplete="name" required aria-describedby="name-err">
-        <p class="err" id="name-err" hidden></p>
+        <p class="err" id="name-err" role="alert" hidden></p>
       </div>
       <div class="field">
         <label for="phone">Mobile number <span class="req" aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
         <input id="phone" name="phone" type="tel" placeholder="09XX XXX XXXX" inputmode="tel"
                maxlength="20" autocomplete="tel" required aria-describedby="phone-err">
-        <p class="err" id="phone-err" hidden></p>
+        <p class="err" id="phone-err" role="alert" hidden></p>
       </div>
       <div class="field">
         <label for="unit">Unit you're asking about</label>
-        <select id="unit">
-          <option>Foton Thunder</option>
-          <option>Foton Tornado</option>
-          <option>Foton Traveller</option>
-          <option>Foton Gratour</option>
-          <option>Foton Transvan</option>
-          <option>Not sure yet</option>
-        </select>
+        <select id="unit"></select>
       </div>
       <div class="field">
         <label for="msg">Message</label>
@@ -1456,10 +1453,31 @@
     var open = $('navLinks').classList.toggle('open');
     this.setAttribute('aria-expanded', open ? 'true' : 'false');
   });
+  /* Standard disclosure-pattern behavior: Escape and an outside click both
+     close the open mobile nav, same as any dropdown is expected to work. */
+  document.addEventListener('keydown', function(e){
+    if(e.key !== 'Escape') return;
+    if(!$('navLinks').classList.contains('open')) return;
+    $('navLinks').classList.remove('open');
+    $('menuToggle').setAttribute('aria-expanded','false');
+    $('menuToggle').focus();
+  });
+  document.addEventListener('click', function(e){
+    if(!$('navLinks').classList.contains('open')) return;
+    if(e.target.closest('#navLinks') || e.target.closest('#menuToggle')) return;
+    $('navLinks').classList.remove('open');
+    $('menuToggle').setAttribute('aria-expanded','false');
+  });
   /* ---------- inquiry form ----------
      An alert() gives no field context, is unreadable to assistive tech and
      drops on mobile behind the keyboard. Errors go inline next to the field
      that caused them, naming both the problem and the fix. */
+  /* Built from the catalog instead of hardcoded, so this list can't go
+     stale again the next time a unit is added or renamed. */
+  $('unit').innerHTML = vehicles.map(function(v){
+    return '<option>'+v.name+'</option>';
+  }).join('') + '<option>Not sure yet</option>';
+
   var form = $('inquiryForm'), formStatus = $('formStatus');
 
   function setErr(input, msg){
