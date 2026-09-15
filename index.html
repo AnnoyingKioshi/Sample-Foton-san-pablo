@@ -138,7 +138,10 @@
     backdrop-filter:blur(12px);
     -webkit-backdrop-filter:blur(12px);
     border-bottom:1px solid var(--line-soft);
+    transition:transform .4s var(--ease);
   }
+  header.is-hidden{transform:translateY(-100%);}
+  #scrollProgress{position:fixed;top:0;left:0;height:2px;background:var(--accent);width:0%;z-index:60;}
   .nav-row{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;height:68px;}
   /* Emblem beside the wordmark, not instead of it: the logo lockup already
      spells out FOTON SAN PABLO, so dropping the whole thing in here would set
@@ -158,6 +161,7 @@
   nav.links button:hover{color:var(--ink);}
   nav.links button.active{color:var(--ink);border-color:var(--accent);}
   .btn{
+    position:relative;overflow:hidden;
     display:inline-flex;align-items:center;gap:0.6rem;
     background:var(--ink);color:#fff;
     font-family:"Outfit",sans-serif;font-weight:500;font-size:0.9rem;
@@ -166,6 +170,13 @@
     transition:transform .5s var(--ease), background .5s var(--ease), box-shadow .5s var(--ease);
   }
   .btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(25,29,34,0.22);}
+  /* Shimmer: a light sweep on hover, once, not looping — a wink, not a loop. */
+  .btn::after{
+    content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;
+    background:linear-gradient(100deg,transparent,rgba(255,255,255,0.35),transparent);
+    transform:skewX(-20deg);transition:left .65s ease;pointer-events:none;
+  }
+  .btn:hover::after{left:140%;}
   .btn:active{transform:scale(0.98);}
   .btn .pip{
     width:26px;height:26px;border-radius:999px;background:rgba(255,255,255,0.14);
@@ -178,7 +189,7 @@
   .btn-ghost:hover{background:rgba(25,29,34,0.05);box-shadow:none;}
   .btn-ghost .pip{background:rgba(25,29,34,0.07);}
   :focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
-  .menu-toggle{display:none;background:none;border:1px solid var(--line);color:var(--ink);padding:0.5rem 0.7rem;border-radius:999px;font-size:0.95rem;cursor:pointer;}
+  .menu-toggle{display:none;align-items:center;justify-content:center;background:none;border:1px solid var(--line);color:var(--ink);padding:0.65rem;border-radius:999px;font-size:0.95rem;cursor:pointer;}
 
   @media (max-width:960px){
     nav.links{
@@ -187,7 +198,7 @@
     }
     nav.links.open{display:flex;}
     nav.links button{padding:0.9rem 1.5rem;border-bottom:1px solid var(--line-soft);width:100%;text-align:left;}
-    .menu-toggle{display:inline-block;}
+    .menu-toggle{display:inline-flex;}
     .nav-cta{display:none;}
   }
 
@@ -654,6 +665,7 @@
 </style>
 
 <a class="skip-link" href="#main">Skip to content</a>
+<div id="scrollProgress" aria-hidden="true"></div>
 
 <header>
   <div class="wrap nav-row">
@@ -664,7 +676,11 @@
         <span class="b2">Foton Sales Rep</span>
       </span>
     </a>
-    <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navLinks">Menu</button>
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navLinks">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+        <path id="menuIcon" d="M4 7 H16 M4 10 H16 M4 13 H16"/>
+      </svg>
+    </button>
     <nav class="links" id="navLinks" aria-label="Main">
       <button data-link data-route="home">Home</button>
       <button data-link data-route="models">Models</button>
@@ -699,7 +715,7 @@
     </div>
 
     <div class="hero-caption">
-      <h1>Built for the route San Pablo <i>actually drives</i>.</h1>
+      <h1>Driven by routes, <i>backed by <span id="trustWord">trust</span></i>.</h1>
       <p class="hero-sub">Direct line to Jonathan Ruelo — Foton sales rep working with Foton San Pablo. No showroom queue, just a message.</p>
       <div class="cta-row">
         <a class="btn" href="viber://chat?number=%2B639163174760">Chat on Viber <span class="pip">&rarr;</span></a>
@@ -775,7 +791,7 @@
 
   <div class="ctaband">
     <div class="wrap row">
-      <h2>Ready to talk about a unit?</h2>
+      <h2 id="ctaHeading">Ready to talk about a unit?</h2>
       <div class="cta-row">
         <a class="btn" href="viber://chat?number=%2B639163174760">Chat on Viber <span class="pip">&rarr;</span></a>
         <a class="btn btn-ghost" data-link data-route="contact" href="#/contact">Schedule a Viewing</a>
@@ -893,15 +909,17 @@
            claim to show what he looks like, which is a different, worse kind
            of dishonest than a bracketed text placeholder. -->
       <div class="about-photo-note">Client photo goes here</div>
+      <div id="bioText">
       <p>I sell the full Foton commercial lineup: pickups, light trucks, passenger vans, MPVs and heavy-duty trucks across the Thunder, Tornado, Tunland, Traveller, Toano, Gratour, Transvan, Harabas, Hurricane, EST-M, ETX-N and EST430 series, for buyers across San Pablo City and the towns around the Seven Lakes.</p>
       <p>Most people I work with run a business: rice traders moving sacks toward Sta. Cruz, delivery operators serving Calamba and Los Baños, cooperatives shuttling workers out to the coconut and coffee farms past the city proper. I help match the right unit to that kind of driving (short-haul, loaded, daily) and walk through financing so the numbers make sense before you sign anything.</p>
       <p>Every unit is backed by Foton San Pablo's own service bays and standard warranty, so a vehicle bought through me gets serviced properly, not passed off to a stranger.</p>
+      </div>
     </div>
     <div class="stats">
-      <div class="stat"><div class="v">7+</div><div class="k">Years selling Foton vehicles</div></div>
-      <div class="stat"><div class="v">150+</div><div class="k">Buyers helped in San Pablo and nearby towns</div></div>
-      <div class="stat"><div class="v">14</div><div class="k">Foton model lines available</div></div>
-      <div class="stat"><div class="v">3 yr</div><div class="k">Standard warranty, serviced at Foton San Pablo</div></div>
+      <div class="stat"><div class="v" data-target="7" data-suffix="+">7+</div><div class="k">Years selling Foton vehicles</div></div>
+      <div class="stat"><div class="v" data-target="150" data-suffix="+">150+</div><div class="k">Buyers helped in San Pablo and nearby towns</div></div>
+      <div class="stat"><div class="v" data-target="14" data-suffix="">14</div><div class="k">Foton model lines available</div></div>
+      <div class="stat"><div class="v" data-target="3" data-suffix=" yr">3 yr</div><div class="k">Standard warranty, serviced at Foton San Pablo</div></div>
     </div>
   </div>
   <div class="wrap">
@@ -1039,8 +1057,10 @@
   </svg>
 </a>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/ScrambleTextPlugin.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/MorphSVGPlugin.min.js"></script>
 <script>
 (function(){
   "use strict";
@@ -1181,6 +1201,8 @@
   /* registered up front: renderLineup builds a ScrollTrigger before the
      motion block further down would otherwise register the plugin. */
   if(hasGsap && window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
+  if(hasGsap && window.ScrambleTextPlugin) gsap.registerPlugin(ScrambleTextPlugin);
+  if(hasGsap && window.MorphSVGPlugin) gsap.registerPlugin(MorphSVGPlugin);
 
   /* ---------- templates ---------- */
   /* The card routes on click, so it has to be reachable and operable without a
@@ -1396,6 +1418,35 @@
   routes.forEach(function(r){ sections[r] = document.querySelector('[data-page="'+r+'"]'); });
   var navBtns = document.querySelectorAll('nav.links [data-route]');
 
+  /* One place to open/close the mobile nav so the icon, aria-expanded and
+     panel visibility can never drift out of sync with each other. */
+  /* Same subpath count (3) in both strings, in the same order, so
+     MorphSVGPlugin maps line-to-line instead of inventing a degenerate
+     stub subpath when morphing back from X to bars. The middle bar just
+     collapses to a zero-length point at the icon's center. */
+  var MENU_BARS = 'M4 7 H16 M4 10 H16 M4 13 H16', MENU_X = 'M4 4.5 L16 15.5 M10 10 H10 M4 15.5 L16 4.5';
+  var menuIsOpen = false;
+  function setMenuOpen(open){
+    menuIsOpen = open;
+    $('navLinks').classList.toggle('open', open);
+    $('menuToggle').setAttribute('aria-expanded', open ? 'true' : 'false');
+    var d = open ? MENU_X : MENU_BARS;
+    if(hasGsap && !reduced && window.MorphSVGPlugin){
+      gsap.to('#menuIcon', {morphSVG:d, duration:0.35, ease:'power2.inOut'});
+    } else {
+      $('menuIcon').setAttribute('d', d);
+    }
+    /* Same slide-in-from-left stagger the desktop rail pills already use —
+       one motion language for "a row of nav items arrives", not a second
+       one invented just for mobile. Close needs no reverse: display:none
+       already removes the panel instantly, nothing to animate out. */
+    if(open && hasGsap && !reduced){
+      gsap.fromTo('#navLinks button', {x:-14, opacity:0}, {
+        x:0, opacity:1, duration:0.4, ease:"power3.out", stagger:0.055, overwrite:"auto"
+      });
+    }
+  }
+
   function showRoute(route){
     if(routes.indexOf(route) === -1) route = 'home';
     routes.forEach(function(r){ sections[r].hidden = (r !== route); });
@@ -1405,8 +1456,7 @@
       if(on) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current');
     });
     document.title = ROUTE_TITLES[route] || SITE;
-    $('navLinks').classList.remove('open');
-    $('menuToggle').setAttribute('aria-expanded','false');
+    setMenuOpen(false);
     /* html{scroll-behavior:smooth} makes a plain scrollTo(0,0) animate, so the
        refresh below would measure at the *old* scroll position and then the
        in-flight scroll would drag reveals back through their triggers in
@@ -1450,23 +1500,20 @@
     location.hash = '/' + el.getAttribute('data-route');
   });
   $('menuToggle').addEventListener('click', function(){
-    var open = $('navLinks').classList.toggle('open');
-    this.setAttribute('aria-expanded', open ? 'true' : 'false');
+    setMenuOpen(!menuIsOpen);
   });
   /* Standard disclosure-pattern behavior: Escape and an outside click both
      close the open mobile nav, same as any dropdown is expected to work. */
   document.addEventListener('keydown', function(e){
     if(e.key !== 'Escape') return;
-    if(!$('navLinks').classList.contains('open')) return;
-    $('navLinks').classList.remove('open');
-    $('menuToggle').setAttribute('aria-expanded','false');
+    if(!menuIsOpen) return;
+    setMenuOpen(false);
     $('menuToggle').focus();
   });
   document.addEventListener('click', function(e){
-    if(!$('navLinks').classList.contains('open')) return;
+    if(!menuIsOpen) return;
     if(e.target.closest('#navLinks') || e.target.closest('#menuToggle')) return;
-    $('navLinks').classList.remove('open');
-    $('menuToggle').setAttribute('aria-expanded','false');
+    setMenuOpen(false);
   });
   /* ---------- inquiry form ----------
      An alert() gives no field context, is unreadable to assistive tech and
@@ -1549,7 +1596,10 @@
       .fromTo('.hero-top .unit-meta',{opacity:0},       {opacity:1, duration:0.5}, "<")
       .fromTo('.rail-pill',          {x:-14, opacity:0},{x:0, opacity:1, duration:0.45, stagger:0.055}, "-=0.25")
       .fromTo('.hero-caption h1',    {y:16, opacity:0}, {y:0, opacity:1, duration:0.55}, "-=0.3")
-      .fromTo('.hero-caption .btn',  {y:12, opacity:0}, {y:0, opacity:1, duration:0.45, stagger:0.07}, "-=0.3");
+      .to('#trustWord', window.ScrambleTextPlugin ? {
+        duration:1, scrambleText:{text:"trust", chars:"lowerCase", revealDelay:0.15, speed:0.3}
+      } : {}, "-=0.2")
+      .fromTo('.hero-caption .btn',  {y:12, opacity:0}, {y:0, opacity:1, duration:0.45, stagger:0.07}, "-=0.5");
 
     /* bounded ambient bloom behind the unit — finite, never an endless loop */
     gsap.fromTo('.hero', {"--glow":0.07}, {"--glow":0.15, duration:3.4, ease:"sine.inOut", yoyo:true, repeat:5});
@@ -1558,7 +1608,7 @@
        and down keeps the page alive rather than leaving dead, static sections. */
     [['.reasons .reason','.band'], ['.bays .bay','.bays'],
      ['.model-card','.models-grid'], ['.stats .stat','.about'],
-     ['.steps li','.steps'], ['.ctaband h2','.ctaband'],
+     ['.steps li','.steps'],
      ['.section-head','.section-head']].forEach(function(pair){
       var els = document.querySelectorAll(pair[0]);
       if(!els.length) return;
@@ -1591,6 +1641,79 @@
       y:26, ease:"none",
       scrollTrigger:{trigger:'.hero', start:"top top", end:"bottom top", scrub:0.5, invalidateOnRefresh:true}
     });
+
+    /* Scroll progress — one thin bar, tied to whichever route is currently
+       visible. [hidden] sections drop out of layout, so body height (and
+       this) is always correct for the page actually on screen. */
+    gsap.to('#scrollProgress', {
+      width:'100%', ease:'none',
+      scrollTrigger:{trigger:document.body, start:'top top', end:'bottom bottom', scrub:0.3}
+    });
+
+    /* Header hides on the way down, returns the instant you scroll up —
+       small give-back on mobile where 14 units is a lot of list to get
+       through. Ignored near the very top so it never fights page load. */
+    (function(){
+      var header = document.querySelector('header');
+      var lastY = window.scrollY;
+      ScrollTrigger.create({
+        start:0, end:'max',
+        onUpdate:function(self){
+          var y = window.scrollY;
+          if(menuIsOpen){ lastY = y; return; }
+          if(y > lastY && y > 140){ header.classList.add('is-hidden'); }
+          else { header.classList.remove('is-hidden'); }
+          lastY = y;
+        }
+      });
+    })();
+
+    /* About stats: count up from 0 once, same final values already sitting
+       in the markup for no-JS / reduced-motion. */
+    document.querySelectorAll('.stat .v[data-target]').forEach(function(el){
+      var target = parseFloat(el.getAttribute('data-target'));
+      var suffix = el.getAttribute('data-suffix') || '';
+      ScrollTrigger.create({trigger:el, start:'top 90%', once:true, onEnter:function(){
+        var obj = {v:0};
+        gsap.to(obj, {v:target, duration:1.3, ease:'power2.out', onUpdate:function(){
+          el.textContent = Math.round(obj.v) + suffix;
+        }});
+      }});
+    });
+
+    /* About bio: words brighten as you scroll through them, tied to scroll
+       position rather than a timer — reads at the visitor's own pace. */
+    (function(){
+      var bio = document.getElementById('bioText');
+      if(!bio) return;
+      bio.querySelectorAll('p').forEach(function(p){
+        var words = p.textContent.split(/(\s+)/).map(function(w){
+          return /\S/.test(w) ? '<span class="word">'+w+'</span>' : w;
+        }).join('');
+        p.innerHTML = words;
+      });
+      var words = bio.querySelectorAll('.word');
+      gsap.set(words, {opacity:0.18});
+      gsap.to(words, {
+        opacity:1, stagger:0.03, ease:'none',
+        scrollTrigger:{trigger:bio, start:'top 80%', end:'bottom 55%', scrub:0.4}
+      });
+    })();
+
+    /* CTA band heading: characters drop in rotating, a one-time flourish on
+       the site's single hardest sales ask — not used anywhere quieter. */
+    (function(){
+      var h = document.getElementById('ctaHeading');
+      if(!h) return;
+      var text = h.textContent;
+      h.innerHTML = text.split('').map(function(c){
+        return '<span class="cta-char" style="display:inline-block;">'+(c===' '?'&nbsp;':c)+'</span>';
+      }).join('');
+      gsap.from(h.querySelectorAll('.cta-char'), {
+        y:40, rotation:45, opacity:0, duration:0.6, ease:'back.out(1.6)', stagger:0.025,
+        scrollTrigger:{trigger:h, start:'top 88%'}
+      });
+    })();
   }
 })();
 </script>
