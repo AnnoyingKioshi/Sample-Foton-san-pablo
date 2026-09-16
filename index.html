@@ -782,7 +782,7 @@
           <div class="testi-who">Buyer from Batangas</div>
         </div>
         <div class="testi-card">
-          <p>“Great for cars for business.”</p>
+          <p>“Great cars for business.”</p>
           <div class="testi-who">Buyer from Pasig</div>
         </div>
       </div>
@@ -948,7 +948,7 @@
       <h2 class="sr-only">Contact details</h2>
       <div class="info">
         <h3>Based at Foton San Pablo</h3>
-        <p>National Highway, Brgy. San Isidro</p>
+        <p>Maharlika Highway, Brgy. San Francisco (Calihan)</p>
         <p>San Pablo City, Laguna 4000</p>
       </div>
       <div class="info">
@@ -964,11 +964,10 @@
       </div>
       <div class="map-wrap">
         <iframe
-          src="https://www.google.com/maps?q=Foton+San+Pablo,+National+Highway,+San+Pablo+City,+Laguna&output=embed"
+          src="https://www.google.com/maps?q=Maharlika+Highway,+Brgy.+San+Francisco,+San+Pablo+City,+Laguna+4000&output=embed"
           width="100%" height="220" style="border:0;border-radius:6px;" loading="lazy"
           referrerpolicy="no-referrer-when-downgrade"
-          title="Map pin near Foton San Pablo, National Highway, San Pablo City, Laguna"></iframe>
-        <p class="fine" style="margin-top:0.6rem;">Approximate pin — swap in the exact address once confirmed.</p>
+          title="Map pin at Maharlika Highway, Brgy. San Francisco, San Pablo City, Laguna"></iframe>
       </div>
     </div>
     <form id="inquiryForm" novalidate>
@@ -1009,7 +1008,7 @@
         <img class="foot-logo" src="images/logo-reversed.webp"
              alt="Foton San Pablo" width="200" height="145" loading="lazy">
         <p class="foot-motto">We sell Dreams.</p>
-        <p>Jonathan Ruelo, a Foton sales representative working with Foton San Pablo on the National Highway, San Pablo City, Laguna. Not the official Foton dealership site.</p>
+        <p>Jonathan Ruelo, a Foton sales representative working with Foton San Pablo on Maharlika Highway, San Pablo City, Laguna. Not the official Foton dealership site.</p>
       </div>
       <div>
         <h4>Lineup</h4>
@@ -1668,17 +1667,32 @@
       });
     })();
 
-    /* About stats: count up from 0 once, same final values already sitting
-       in the markup for no-JS / reduced-motion. */
+    /* About stats: count up from 0 every time you scroll back to them, same
+       as every other reveal on this site — resets on the way out so there's
+       something to count up from on the way back in, including a route
+       revisit (showRoute's ScrollTrigger.refresh() re-measures this fresh). */
     document.querySelectorAll('.stat .v[data-target]').forEach(function(el){
       var target = parseFloat(el.getAttribute('data-target'));
       var suffix = el.getAttribute('data-suffix') || '';
-      ScrollTrigger.create({trigger:el, start:'top 90%', once:true, onEnter:function(){
-        var obj = {v:0};
-        gsap.to(obj, {v:target, duration:1.3, ease:'power2.out', onUpdate:function(){
+      var obj = {v:0};
+      var tween;
+      function play(){
+        if(tween) tween.kill();
+        obj.v = 0;
+        tween = gsap.to(obj, {v:target, duration:1.3, ease:'power2.out', onUpdate:function(){
           el.textContent = Math.round(obj.v) + suffix;
         }});
-      }});
+      }
+      function resetToZero(){
+        if(tween) tween.kill();
+        obj.v = 0;
+        el.textContent = '0' + suffix;
+      }
+      ScrollTrigger.create({
+        trigger:el, start:'top 90%', end:'bottom top',
+        onEnter:play, onEnterBack:play,
+        onLeave:resetToZero, onLeaveBack:resetToZero
+      });
     });
 
     /* About bio: words brighten as you scroll through them, tied to scroll
@@ -1700,8 +1714,10 @@
       });
     })();
 
-    /* CTA band heading: characters drop in rotating, a one-time flourish on
-       the site's single hardest sales ask — not used anywhere quieter. */
+    /* CTA band heading: characters drop in rotating. Same replay-on-re-entry
+       rule as the rest of the site (see the reveal loop above) — a plain
+       ScrollTrigger with no toggleActions only ever plays once, then sits
+       frozen at its final state on every later visit to the page. */
     (function(){
       var h = document.getElementById('ctaHeading');
       if(!h) return;
@@ -1711,7 +1727,7 @@
       }).join('');
       gsap.from(h.querySelectorAll('.cta-char'), {
         y:40, rotation:45, opacity:0, duration:0.6, ease:'back.out(1.6)', stagger:0.025,
-        scrollTrigger:{trigger:h, start:'top 88%'}
+        scrollTrigger:{trigger:h, start:'top 88%', toggleActions:"play none none reverse"}
       });
     })();
   }
